@@ -33,4 +33,9 @@ public class InMemoryRepository implements IStudentRepository{
     public Optional<Student> findById(Long id){
         return Optional.ofNullable(database.get(id));
     }
+
+    @Override
+    public List<Student> findAll() {
+        return new ArrayList<>(database.values());
+    }
 }
