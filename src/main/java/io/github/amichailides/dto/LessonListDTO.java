@@ -1,14 +1,18 @@
 package io.github.amichailides.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class StudentListDTO {
-    private List<StudentPrintDTO> students;
+@NoArgsConstructor
+public class LessonListDTO {
+    List<LessonPrintDTO> lessons = new ArrayList<>();
+    String name;
+    String level;
 }

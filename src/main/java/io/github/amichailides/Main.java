@@ -1,6 +1,7 @@
 package io.github.amichailides;
 
 import io.github.amichailides.dto.LessonCreateDTO;
+import io.github.amichailides.dto.LessonListDTO;
 import io.github.amichailides.dto.StudentCreateDTO;
 import io.github.amichailides.dto.StudentListDTO;
 import io.github.amichailides.model.SkillLevel;
@@ -8,10 +9,12 @@ import io.github.amichailides.model.Student;
 import io.github.amichailides.repository.IStudentRepository;
 import io.github.amichailides.repository.InMemoryRepository;
 import io.github.amichailides.service.Service;
+import io.github.amichailides.view.StudentDataEntry;
 import io.github.amichailides.view.StudentPrinter;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -20,42 +23,64 @@ public class Main {
         IStudentRepository repository = new InMemoryRepository();
         Service service = new Service(repository);
         StudentPrinter printer = new StudentPrinter();
-
-        StudentCreateDTO studentDTO = StudentCreateDTO.builder()
-                .firstName("Nikos")
-                .lastName("Matsablokos")
-                .email("Fousekis@openai.com")
-                .mobile("6946729648")
-                .level(SkillLevel.ADVANCED)
-                .build();
-        StudentCreateDTO studentDTO2 = StudentCreateDTO.builder()
-                .firstName("Nikos")
-                .lastName("Korobos")
-                .email("Korobos@openai.com")
-                .mobile("6946729648")
-                .level(SkillLevel.INTERMEDIATE)
-                .build();
-
-        LessonCreateDTO lessonDTO = LessonCreateDTO.builder()
-                .date(LocalDate.now())
-                .comments("Wrist position, small pick movement ")
-                .homework("Berklee guitar 1, page 64")
-                .build();
-
-        service.registerStudent(studentDTO);
-        service.registerStudent(studentDTO2);
-
-        // pull in memory DB from repository
-        List<Student> allStudents = repository.findAll();
-
-        // create packet for print
-        StudentListDTO packageForPrinting = service.prepareStudentsForPrint(allStudents);
+        Scanner scanner = new Scanner(System.in);
 
 
-        printer.printAllStudents(packageForPrinting);
-        service.addLesson(1L, lessonDTO);
-        System.out.println(service.getStudentLessons(1L));
+        boolean isRunning = true;
+
+        do {
+            try {
+                printMenu();
+                int inputAction = Integer.parseInt(scanner.nextLine());
+                switch (inputAction) {
+                    case 1: {
+                        StudentCreateDTO studentDTO = StudentDataEntry.collectStudentData(scanner);
+                        service.registerStudent(studentDTO);
+                        System.out.printf("Η εγγραφη του %s ολοκληρωθηκε με επιτυχια",
+                                studentDTO.getFirstName() + " " + studentDTO.getLastName());
+                        break;
+                    }
+                    case 2: {
+                        StudentListDTO allStudents = service.prepareStudentsForPrint(repository.findAll());
+                        printer.printAllStudents(allStudents);
+                        break;
+                    }
+                    case 3: {
+                        if (repository.findAll().isEmpty()){
+                            throw new IllegalStateException("Δεν υπαρχουν ενεργοι μαθητες.");
+                        }
+                        LessonCreateDTO lessonDTO = StudentDataEntry.collectLessonData(scanner);
+                        Long studentId = StudentDataEntry.readStudentId(scanner);
+                        service.addLesson(studentId, lessonDTO);
+                        System.out.println("Η εγγραφη του μαθηματος ολοκληρωθηκε με επιτυχια");
+                        break;
+                    }
+                    case 4: {
+
+                        Long studentId = StudentDataEntry.readStudentId(scanner);
+                        LessonListDTO allStudentLessons = service.prepareLessonsForPrint(studentId);
+                        printer.printStudentLessons(allStudentLessons);
+                        break;
+                    }
+                    case 0 : isRunning = false;
+
+                }
+
+            }catch (IllegalArgumentException | IllegalStateException e) {
+                System.out.println("Σφαλμα -> " + e.getMessage());
+            }
+        } while (isRunning);
 
 
+    }
+
+    private static void printMenu() {
+        System.out.println("\n=== MUSIC TRACKER MENU ===");
+        System.out.println("1. Εγγραφή νέου μαθητή");
+        System.out.println("2. Προβολή όλων των μαθητών");
+        System.out.println("3. Προσθήκη μαθήματος σε μαθητή");
+        System.out.println("4. Προβολή ιστορικού μαθημάτων");
+        System.out.println("0. Έξοδος");
+        System.out.print("Επιλέξτε ενέργεια: ");
     }
 }

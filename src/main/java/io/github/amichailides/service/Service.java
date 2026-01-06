@@ -1,17 +1,11 @@
 package io.github.amichailides.service;
 
-import io.github.amichailides.dto.LessonCreateDTO;
-import io.github.amichailides.dto.StudentCreateDTO;
-import io.github.amichailides.dto.StudentListDTO;
-import io.github.amichailides.dto.StudentPrintDTO;
+import io.github.amichailides.dto.*;
 import io.github.amichailides.model.Lesson;
 import io.github.amichailides.model.Student;
 import io.github.amichailides.repository.IStudentRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class Service {
     private final IStudentRepository repository;
@@ -52,6 +46,21 @@ public class Service {
                 .toList();
 
        return new StudentListDTO(printList);
+    }
+
+    public LessonListDTO prepareLessonsForPrint(Long id) {
+        Objects.requireNonNull(id, "Id can't be null");
+
+        Optional<Student> student = repository.findById(id);
+        Student s = student.orElseThrow(
+                () -> new IllegalArgumentException("δεν υπαρχει χρηστης με id: " + id)
+        );
+
+        List<LessonPrintDTO> lessonsPrintList = s.getLessons().stream()
+                .map(l -> LessonPrintDTO.fromEntity(l))
+                .toList();
+
+        return new LessonListDTO(lessonsPrintList, s.getFirstName() + " " + s.getLastName(), s.getLevel().toString());
     }
 
 }
