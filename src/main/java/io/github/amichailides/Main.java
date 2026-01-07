@@ -92,6 +92,7 @@ public class Main {
         System.out.println("2. Προβολή όλων των μαθητών");
         System.out.println("3. Προσθήκη μαθήματος σε μαθητή");
         System.out.println("4. Προβολή ιστορικού μαθημάτων");
+        System.out.println("5. Διαγραφη Μαθητη");
         System.out.println("0. Έξοδος");
         System.out.print("Επιλέξτε ενέργεια: ");
     }
