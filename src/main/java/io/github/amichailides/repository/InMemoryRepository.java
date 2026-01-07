@@ -44,6 +44,7 @@ public class InMemoryRepository implements IStudentRepository{
         database.remove(id); // Απλό και γρήγορο στο Map
     }
 
+    @Override
     public boolean existsById(Long id) {
         return database.containsKey(id);
     }

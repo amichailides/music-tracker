@@ -61,6 +61,7 @@ public class Service {
 
 
     public void deleteStudent(Long id) {
+        Objects.requireNonNull(id, "id can't be null");
 
         if (!repository.existsById(id)) {
             throw new NoSuchElementException("Ο μαθητής δεν βρέθηκε.");
