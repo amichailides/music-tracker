@@ -62,6 +62,18 @@ public class Main {
                         printer.printStudentLessons(allStudentLessons);
                         break;
                     }
+                    case 5: {
+                        System.out.println("--- Διαγραφη Μαθητη ---");
+                        System.out.print("Εισαγετε το ID του μαθητη που θελετε να διαγραψετε: ");
+
+                        Long id = Long.parseLong(scanner.nextLine());
+
+                        service.deleteStudent(id);
+
+
+                        System.out.println("Επιτυχια: Ο μαθητης με ID " + id + " διαγράφηκε οριστικά.");
+                        break;
+                    }
                     case 0 : isRunning = false;
 
                 }

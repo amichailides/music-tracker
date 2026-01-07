@@ -11,4 +11,6 @@ public interface IStudentRepository {
     List<Student> findByLastName (String Lastname);
     Optional<Student> findById (Long id);
     List<Student> findAll();
+    void deleteById(Long id);
+    boolean existsById(Long id);
 }

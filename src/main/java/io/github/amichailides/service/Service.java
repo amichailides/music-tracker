@@ -32,12 +32,6 @@ public class Service {
         return lesson;
     }
 
-    public List<Lesson> getStudentLessons(Long studentId) {
-        Objects.requireNonNull(studentId, "Id can't be null");
-        Student student = repository.findById(studentId).orElseThrow();
-        return new ArrayList<>(student.getLessons());
-    }
-
     public StudentListDTO prepareStudentsForPrint(List<Student> students) {
         Objects.requireNonNull(students, "Student's can't be null");
 
@@ -61,6 +55,17 @@ public class Service {
                 .toList();
 
         return new LessonListDTO(lessonsPrintList, s.getFirstName() + " " + s.getLastName(), s.getLevel().toString());
+    }
+
+
+
+
+    public void deleteStudent(Long id) {
+
+        if (!repository.existsById(id)) {
+            throw new NoSuchElementException("Ο μαθητής δεν βρέθηκε.");
+        }
+        repository.deleteById(id);
     }
 
 }

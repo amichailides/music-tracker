@@ -3,10 +3,9 @@ package io.github.amichailides.repository;
 import io.github.amichailides.model.Student;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class InMemoryRepository implements IStudentRepository{
-    private HashMap<Long, Student> database = new HashMap<>();
+    private final HashMap<Long, Student> database = new HashMap<>();
     private static Long id = 1L;
 
     public Student save(Student student){
@@ -36,6 +35,16 @@ public class InMemoryRepository implements IStudentRepository{
 
     @Override
     public List<Student> findAll() {
-        return new ArrayList<>(database.values());
+        return List.copyOf(database.values());
+        //return new ArrayList<>(database.values());
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        database.remove(id); // Απλό και γρήγορο στο Map
+    }
+
+    public boolean existsById(Long id) {
+        return database.containsKey(id);
     }
 }
