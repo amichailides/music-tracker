@@ -34,7 +34,7 @@ public class Main {
                     case 1: {
                         StudentCreateDTO studentDTO = StudentDataEntry.collectStudentData(scanner);
                         service.registerStudent(studentDTO);
-                        System.out.printf("Η εγγραφη του %s ολοκληρωθηκε με επιτυχια",
+                        System.out.printf("Η εγγραφη του %s ολοκληρωθηκε με επιτυχια %n",
                                 studentDTO.getFirstName() + " " + studentDTO.getLastName());
                         break;
                     }

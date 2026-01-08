@@ -1,5 +1,6 @@
 package io.github.amichailides.repository;
 
+import io.github.amichailides.model.SkillLevel;
 import io.github.amichailides.model.Student;
 import java.sql.*;
 import java.util.ArrayList;
@@ -42,8 +43,30 @@ public class SqlStudentRepository implements IStudentRepository {
 
     @Override
     public List<Student> findAll() {
-        //TODO
-        return null;
+        List<Student> students = new ArrayList<>();
+        String query = "SELECT * FROM students";
+        try (Connection conn = DriverManager.getConnection(url,user, password);
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query)){
+            while (rs.next()) {
+                Student student = new Student();
+                student.setId(rs.getLong("id"));
+                student.setFirstName(rs.getString("first_name"));
+                student.setLastName(rs.getString("last_name"));
+                student.setEmail(rs.getString("email"));
+                student.setMobile(rs.getString("mobile"));
+                String levelFromDb = rs.getString("skill_level");
+                if (levelFromDb != null) {
+                    student.setLevel(SkillLevel.valueOf(levelFromDb.toUpperCase()));
+                }
+                students.add(student);
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error on loading students from Db", e);
+        }
+
+        return students;
     }
 
     @Override
