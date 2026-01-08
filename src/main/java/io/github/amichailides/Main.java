@@ -4,23 +4,21 @@ import io.github.amichailides.dto.LessonCreateDTO;
 import io.github.amichailides.dto.LessonListDTO;
 import io.github.amichailides.dto.StudentCreateDTO;
 import io.github.amichailides.dto.StudentListDTO;
-import io.github.amichailides.model.SkillLevel;
-import io.github.amichailides.model.Student;
+
 import io.github.amichailides.repository.IStudentRepository;
 import io.github.amichailides.repository.InMemoryRepository;
+import io.github.amichailides.repository.SqlStudentRepository;
 import io.github.amichailides.service.Service;
 import io.github.amichailides.view.StudentDataEntry;
 import io.github.amichailides.view.StudentPrinter;
-
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        IStudentRepository repository = new InMemoryRepository();
+        //IStudentRepository repository = new InMemoryRepository();
+        IStudentRepository repository = new SqlStudentRepository();
         Service service = new Service(repository);
         StudentPrinter printer = new StudentPrinter();
         Scanner scanner = new Scanner(System.in);
