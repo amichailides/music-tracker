@@ -44,9 +44,12 @@ public class Main {
                         break;
                     }
                     case 3: {
+                        /*
                         if (repository.findAll().isEmpty()){
                             throw new IllegalStateException("Δεν υπαρχουν ενεργοι μαθητες.");
                         }
+                        */
+
                         LessonCreateDTO lessonDTO = StudentDataEntry.collectLessonData(scanner);
                         Long studentId = StudentDataEntry.readStudentId(scanner);
                         service.addLesson(studentId, lessonDTO);

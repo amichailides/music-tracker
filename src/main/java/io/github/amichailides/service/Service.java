@@ -5,6 +5,7 @@ import io.github.amichailides.model.Lesson;
 import io.github.amichailides.model.Student;
 import io.github.amichailides.repository.IStudentRepository;
 
+import java.sql.DriverManager;
 import java.util.*;
 
 public class Service {

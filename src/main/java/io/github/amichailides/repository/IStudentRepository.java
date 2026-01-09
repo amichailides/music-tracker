@@ -3,7 +3,6 @@ package io.github.amichailides.repository;
 import io.github.amichailides.model.Student;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public interface IStudentRepository {

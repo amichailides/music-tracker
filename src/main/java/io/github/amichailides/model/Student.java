@@ -20,7 +20,6 @@ public class Student {
     private String email;
     private String mobile;
     private SkillLevel level;
-
     @Builder.Default
     private List<Lesson> lessons = new ArrayList<>();
 
