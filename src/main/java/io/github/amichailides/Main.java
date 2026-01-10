@@ -1,9 +1,6 @@
 package io.github.amichailides;
 
-import io.github.amichailides.dto.LessonCreateDTO;
-import io.github.amichailides.dto.LessonListDTO;
-import io.github.amichailides.dto.StudentCreateDTO;
-import io.github.amichailides.dto.StudentListDTO;
+import io.github.amichailides.dto.*;
 
 import io.github.amichailides.repository.LessonRepository;
 import io.github.amichailides.repository.SqlLessonRepository;
@@ -27,8 +24,6 @@ public class Main {
         Service service = new Service(studentRepo, lessonRepo);
         StudentPrinter printer = new StudentPrinter();
         Scanner scanner = new Scanner(System.in);
-
-        service.getStudentHistory(2L).forEach(System.out::println);
 
         boolean isRunning = true;
 
@@ -59,10 +54,16 @@ public class Main {
                         break;
                     }
                     case 4: {
+                        try {
+                            Long studentId = StudentDataEntry.readStudentId(scanner);
+                            service.getStudentProfile(studentId).ifPresentOrElse(
+                                    profile -> printer.printFullProfile(profile),
+                                    () -> System.out.printf("Σφαλμα: ο μαθητης με id: %d δεν βρεθηκε.%n", studentId)
+                            );
+                        } catch (NumberFormatException e) {
+                            System.out.println("Ακυρο id. Παρακαλω προσπαθειστε ξανα.");
+                        }
 
-                        Long studentId = StudentDataEntry.readStudentId(scanner);
-                        LessonListDTO allStudentLessons = service.prepareLessonsForPrint(studentId);
-                        printer.printStudentLessons(allStudentLessons);
                         break;
                     }
                     case 5: {
@@ -78,6 +79,10 @@ public class Main {
                         }
 
                         break;
+                    }
+                    case 6: {
+                        System.out.println("--- Ενημέρωση Μαθητή ---");
+                        Long studentId = StudentDataEntry.readStudentId(scanner);
                     }
                     case 0 : isRunning = false;
 

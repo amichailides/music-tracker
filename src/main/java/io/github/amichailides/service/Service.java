@@ -80,4 +80,18 @@ public class Service {
         return lessonRepo.findById(studentId);
     }
 
+    public Optional<StudentProfileDTO> getStudentProfile(Long studentId){
+        Objects.requireNonNull(studentId, "studentId can't be null");
+        //pull all lessons, create student lesson dto -> StudentProfileDTO,
+        return studentRepo.findById(studentId).map(student -> {
+            List<Lesson> lessons = lessonRepo.findById(studentId);
+
+            return StudentProfileDTO.builder()
+                    .studentDetails(StudentPrintDTO.from(student))
+                    .lessons(lessons.stream().map(l -> LessonPrintDTO.fromEntity(l)).toList())
+                    .build();
+        });
+    }
+
+
 }
