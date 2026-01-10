@@ -3,20 +3,23 @@ package io.github.amichailides.service;
 import io.github.amichailides.dto.*;
 import io.github.amichailides.model.Lesson;
 import io.github.amichailides.model.Student;
+import io.github.amichailides.repository.LessonRepository;
 import io.github.amichailides.repository.StudentRepository;
 
 import java.util.*;
 
 public class Service {
-    private final StudentRepository repository;
+    private final StudentRepository studentRepo;
+    private final LessonRepository lessonRepo;
 
-    public Service(StudentRepository repository) {
-        this.repository = repository;
+    public Service(StudentRepository studentRepo, LessonRepository lessonRepo) {
+        this.studentRepo = studentRepo;
+        this.lessonRepo = lessonRepo;
     }
 
     public Student registerStudent(StudentCreateDTO dto){
         Student student = Student.createFromDTO(dto);
-        return repository.save(student);
+        return studentRepo.save(student);
     }
 
 
@@ -24,12 +27,11 @@ public class Service {
         Objects.requireNonNull(id, "ID can't be null");
         Objects.requireNonNull(dto, "DTO can't be null");
 
-        Student student = repository.findById(id).orElseThrow();
+        Student student = studentRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Student not found with id: " + id));
         Lesson lesson = Lesson.createFromDTO(dto);
-        student.getLessons().add(lesson);
-        repository.save(student);
 
-        return lesson;
+        return lessonRepo.save(lesson, student.getId());
     }
 
     public StudentListDTO prepareStudentsForPrint(List<Student> students) {
@@ -42,19 +44,22 @@ public class Service {
        return new StudentListDTO(printList);
     }
 
-    public LessonListDTO prepareLessonsForPrint(Long id) {
-        Objects.requireNonNull(id, "Id can't be null");
+    public LessonListDTO prepareLessonsForPrint(Long studentId) {
+        Objects.requireNonNull(studentId, "Id can't be null");
 
-        Optional<Student> student = repository.findById(id);
-        Student s = student.orElseThrow(
-                () -> new IllegalArgumentException("δεν υπαρχει χρηστης με id: " + id)
-        );
+        Student student = studentRepo.findById(studentId)
+                .orElseThrow( () -> new IllegalArgumentException("Δεν υπαρχει μαθητης με id: " + studentId));
 
-        List<LessonPrintDTO> lessonsPrintList = s.getLessons().stream()
+        List<Lesson> lessons = lessonRepo.findById(studentId);
+
+        List<LessonPrintDTO> lessonsPrintList = lessons.stream()
                 .map(l -> LessonPrintDTO.fromEntity(l))
                 .toList();
 
-        return new LessonListDTO(lessonsPrintList, s.getFirstName() + " " + s.getLastName(), s.getLevel().toString());
+        return new LessonListDTO(
+                lessonsPrintList,
+                student.getFirstName() + " " + student.getLastName(),
+                student.getLevel().toString());
     }
 
 
@@ -63,10 +68,20 @@ public class Service {
     public void deleteStudent(Long id) {
         Objects.requireNonNull(id, "id can't be null");
 
-        if (!repository.existsById(id)) {
+        if (!studentRepo.existsById(id)) {
             throw new NoSuchElementException("Ο μαθητής δεν βρέθηκε.");
         }
-        repository.deleteById(id);
+        studentRepo.deleteById(id);
+    }
+
+    public List<Lesson> getStudentHistory(Long studentId){
+        Objects.requireNonNull(studentId, "Student id can't be null");
+
+        studentRepo.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        // TODO: Μελλοντικά, μετάτρεψε τη List<Lesson> (Model) σε List<LessonResponseDTO>
+        // για να μην εκθέτουμε το Database Entity απευθείας στο UI/API.
+        return lessonRepo.findById(studentId);
     }
 
 }

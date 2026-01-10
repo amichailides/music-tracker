@@ -3,6 +3,9 @@ package io.github.amichailides.repository;
 import io.github.amichailides.model.Lesson;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class SqlLessonRepository implements LessonRepository {
@@ -33,5 +36,35 @@ public class SqlLessonRepository implements LessonRepository {
             throw new RuntimeException("Σφαλμα αποθηκευσης μαθηματος" + e.getMessage(), e);
         }
         return lesson;
+    }
+
+    public List<Lesson> findById(Long studentId){
+        List<Lesson> lessons = new ArrayList<>();
+
+        String query = "SELECT * FROM lessons WHERE student_id = ? ORDER BY lesson_date DESC";
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+        PreparedStatement pstm = conn.prepareStatement(query)){
+
+            pstm.setLong(1, studentId);
+
+            try (ResultSet rs = pstm.executeQuery()){
+                while (rs.next()){
+                    Lesson lesson = Lesson.builder()
+                            .id(rs.getLong("id"))
+                            .date(rs.getObject("lesson_date", LocalDate.class))
+                            .comments(rs.getString("lesson_comments"))
+                            .homework(rs.getString("homework"))
+                            .build();
+
+                    lessons.add(lesson);
+                }
+            }
+            return lessons;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Σφαλμα: Δεν ηταν δυνατη η φορτωση των μαθηματων"
+             + e.getMessage(), e);
+        }
+
     }
 }

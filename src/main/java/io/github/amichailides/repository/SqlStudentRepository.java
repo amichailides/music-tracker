@@ -81,7 +81,7 @@ public class SqlStudentRepository implements StudentRepository {
         String query = "SELECT * FROM students";
         try (Connection conn = DriverManager.getConnection(url, user, password);
              PreparedStatement pstm = conn.prepareStatement(query);
-             ResultSet rs = pstm.executeQuery(query)) {
+             ResultSet rs = pstm.executeQuery()) {
             while (rs.next()) {
                 Student student = new Student();
                 student.setId(rs.getLong("id"));

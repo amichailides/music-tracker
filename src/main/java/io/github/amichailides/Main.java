@@ -5,6 +5,8 @@ import io.github.amichailides.dto.LessonListDTO;
 import io.github.amichailides.dto.StudentCreateDTO;
 import io.github.amichailides.dto.StudentListDTO;
 
+import io.github.amichailides.repository.LessonRepository;
+import io.github.amichailides.repository.SqlLessonRepository;
 import io.github.amichailides.repository.StudentRepository;
 import io.github.amichailides.repository.SqlStudentRepository;
 import io.github.amichailides.service.Service;
@@ -18,11 +20,13 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         //IStudentRepository repository = new InMemoryRepository();
-        StudentRepository repository = new SqlStudentRepository();
-        Service service = new Service(repository);
+        StudentRepository studentRepo = new SqlStudentRepository();
+        LessonRepository lessonRepo = new SqlLessonRepository();
+        Service service = new Service(studentRepo, lessonRepo);
         StudentPrinter printer = new StudentPrinter();
         Scanner scanner = new Scanner(System.in);
 
+        service.getStudentHistory(2L).forEach(System.out::println);
 
         boolean isRunning = true;
 
@@ -39,16 +43,11 @@ public class Main {
                         break;
                     }
                     case 2: {
-                        StudentListDTO allStudents = service.prepareStudentsForPrint(repository.findAll());
+                        StudentListDTO allStudents = service.prepareStudentsForPrint(studentRepo.findAll());
                         printer.printAllStudents(allStudents);
                         break;
                     }
                     case 3: {
-                        /*
-                        if (repository.findAll().isEmpty()){
-                            throw new IllegalStateException("Δεν υπαρχουν ενεργοι μαθητες.");
-                        }
-                        */
                         // TODO: Switch to instance call after DI refactor (e.g., lessonEntry.collectLessonData())
                         // FIXME: Check for Scanner buffer issue (nextLine after nextInt)
                         LessonCreateDTO lessonDTO = LessonDataEntry.collectLessonData(scanner);
