@@ -5,10 +5,10 @@ import io.github.amichailides.dto.LessonListDTO;
 import io.github.amichailides.dto.StudentCreateDTO;
 import io.github.amichailides.dto.StudentListDTO;
 
-import io.github.amichailides.repository.IStudentRepository;
-import io.github.amichailides.repository.InMemoryRepository;
+import io.github.amichailides.repository.StudentRepository;
 import io.github.amichailides.repository.SqlStudentRepository;
 import io.github.amichailides.service.Service;
+import io.github.amichailides.view.LessonDataEntry;
 import io.github.amichailides.view.StudentDataEntry;
 import io.github.amichailides.view.StudentPrinter;
 import java.util.Scanner;
@@ -18,7 +18,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         //IStudentRepository repository = new InMemoryRepository();
-        IStudentRepository repository = new SqlStudentRepository();
+        StudentRepository repository = new SqlStudentRepository();
         Service service = new Service(repository);
         StudentPrinter printer = new StudentPrinter();
         Scanner scanner = new Scanner(System.in);
@@ -49,8 +49,9 @@ public class Main {
                             throw new IllegalStateException("Δεν υπαρχουν ενεργοι μαθητες.");
                         }
                         */
-
-                        LessonCreateDTO lessonDTO = StudentDataEntry.collectLessonData(scanner);
+                        // TODO: Switch to instance call after DI refactor (e.g., lessonEntry.collectLessonData())
+                        // FIXME: Check for Scanner buffer issue (nextLine after nextInt)
+                        LessonCreateDTO lessonDTO = LessonDataEntry.collectLessonData(scanner);
                         Long studentId = StudentDataEntry.readStudentId(scanner);
                         service.addLesson(studentId, lessonDTO);
                         System.out.println("Η εγγραφη του μαθηματος ολοκληρωθηκε με επιτυχια");

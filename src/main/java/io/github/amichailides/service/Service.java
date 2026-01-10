@@ -3,15 +3,14 @@ package io.github.amichailides.service;
 import io.github.amichailides.dto.*;
 import io.github.amichailides.model.Lesson;
 import io.github.amichailides.model.Student;
-import io.github.amichailides.repository.IStudentRepository;
+import io.github.amichailides.repository.StudentRepository;
 
-import java.sql.DriverManager;
 import java.util.*;
 
 public class Service {
-    private final IStudentRepository repository;
+    private final StudentRepository repository;
 
-    public Service(IStudentRepository repository) {
+    public Service(StudentRepository repository) {
         this.repository = repository;
     }
 

@@ -36,19 +36,7 @@ public class StudentDataEntry {
                 .build();
     }
 
-    public static LessonCreateDTO collectLessonData(Scanner scanner) {
-        LocalDate date = LocalDate.now();
-        System.out.print("Σχολια: ");
-        String comments = scanner.nextLine();
-        System.out.print("Ασκησεις για το σπιτι: ");
-        String homework = scanner.nextLine();
 
-        return LessonCreateDTO.builder()
-                .date(date)
-                .comments(comments)
-                .homework(homework)
-                .build();
-    }
 
     public static Long readStudentId(Scanner scanner) {
         System.out.print("Εισαγετε το id του Μαθητη: ");

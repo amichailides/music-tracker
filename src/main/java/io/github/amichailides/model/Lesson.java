@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Data
 @Builder
 public class Lesson {
+    private Long id;
     private LocalDate date;
     private String comments;
     private String homework;
@@ -20,6 +21,4 @@ public class Lesson {
                 .homework(dto.getHomework())
                 .build();
     }
-
-
 }

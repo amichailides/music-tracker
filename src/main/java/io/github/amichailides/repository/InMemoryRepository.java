@@ -4,7 +4,7 @@ import io.github.amichailides.model.Student;
 
 import java.util.*;
 
-public class InMemoryRepository implements IStudentRepository{
+public class InMemoryRepository implements StudentRepository {
     private final HashMap<Long, Student> database = new HashMap<>();
     private static Long id = 1L;
 

@@ -1,6 +1,5 @@
 package io.github.amichailides.repository;
 
-import io.github.amichailides.model.Lesson;
 import io.github.amichailides.model.SkillLevel;
 import io.github.amichailides.model.Student;
 
@@ -10,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public class SqlStudentRepository implements IStudentRepository {
+public class SqlStudentRepository implements StudentRepository {
 
     private final String url = "jdbc:postgresql://localhost:5433/music_tracker";
     private final String user = "postgres";
