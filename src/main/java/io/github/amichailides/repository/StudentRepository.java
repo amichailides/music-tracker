@@ -8,8 +8,8 @@ import java.util.Optional;
 public interface StudentRepository {
     Student save(Student student);
     List<Student> findByLastName (String Lastname);
-    Optional<Student> findById (Long id);
+    Optional<Student> findById (Long studentId);
     List<Student> findAll();
-    void deleteById(Long id);
-    boolean existsById(Long id);
+    void deleteById(Long studentId);
+    boolean existsById(Long studentId);
 }

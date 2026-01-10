@@ -22,13 +22,12 @@ public class Service {
         return studentRepo.save(student);
     }
 
-
-    public Lesson addLesson(Long id, LessonCreateDTO dto){
-        Objects.requireNonNull(id, "ID can't be null");
+    public Lesson addLesson(Long studentId, LessonCreateDTO dto){
+        Objects.requireNonNull(studentId, "ID can't be null");
         Objects.requireNonNull(dto, "DTO can't be null");
 
-        Student student = studentRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Student not found with id: " + id));
+        Student student = studentRepo.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found with id: " + studentId));
         Lesson lesson = Lesson.createFromDTO(dto);
 
         return lessonRepo.save(lesson, student.getId());
@@ -61,9 +60,6 @@ public class Service {
                 student.getFirstName() + " " + student.getLastName(),
                 student.getLevel().toString());
     }
-
-
-
 
     public void deleteStudent(Long id) {
         Objects.requireNonNull(id, "id can't be null");

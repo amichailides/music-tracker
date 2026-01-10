@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface LessonRepository {
     Lesson save(Lesson lesson, Long id);
-    List<Lesson> findById(Long id);
+    List<Lesson> findById(Long studentId);
+    void deleteById (Long studentId);
 }

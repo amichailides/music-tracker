@@ -2,10 +2,12 @@ package io.github.amichailides.repository;
 
 import io.github.amichailides.model.Lesson;
 
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
 
 
 public class SqlLessonRepository implements LessonRepository {
@@ -13,7 +15,7 @@ public class SqlLessonRepository implements LessonRepository {
     private final String user = "postgres";
     private final String password = System.getenv("DB_PASSWORD");
 
-    public Lesson save(Lesson lesson, Long studentId) {
+    public Lesson save (Lesson lesson, Long studentId) {
         String query = "INSERT INTO lessons (lesson_date, lesson_comments, homework, student_id)" +
                 "VALUES (?, ?, ?, ?)";
 
@@ -38,7 +40,7 @@ public class SqlLessonRepository implements LessonRepository {
         return lesson;
     }
 
-    public List<Lesson> findById(Long studentId){
+    public List<Lesson> findById (Long studentId){
         List<Lesson> lessons = new ArrayList<>();
 
         String query = "SELECT * FROM lessons WHERE student_id = ? ORDER BY lesson_date DESC";
@@ -67,4 +69,9 @@ public class SqlLessonRepository implements LessonRepository {
         }
 
     }
+
+    public void deleteById (Long studentId) { // αυτο εδω θα το κανουμε να παιρνει id lesson και να σβηνει καποιο μαθημα
+    //TODO
+    }
+
 }

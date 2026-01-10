@@ -13,6 +13,8 @@ import io.github.amichailides.service.Service;
 import io.github.amichailides.view.LessonDataEntry;
 import io.github.amichailides.view.StudentDataEntry;
 import io.github.amichailides.view.StudentPrinter;
+
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -65,14 +67,16 @@ public class Main {
                     }
                     case 5: {
                         System.out.println("--- Διαγραφη Μαθητη ---");
-                        System.out.print("Εισαγετε το ID του μαθητη που θελετε να διαγραψετε: ");
+                        try {
+                            Long studentId = StudentDataEntry.readStudentId(scanner);
+                            service.deleteStudent(studentId);
+                            System.out.println("Επιτυχια: Ο μαθητης με ID " + studentId + " διαγράφηκε οριστικά.");
+                        } catch (NoSuchElementException | IllegalArgumentException e) {
+                            System.out.println("Σφαλμα: " + e.getMessage());
+                        } catch (Exception e) {
+                            System.out.println("Απροσμενο σφαλμα: " + e.getMessage());
+                        }
 
-                        Long id = Long.parseLong(scanner.nextLine());
-
-                        service.deleteStudent(id);
-
-
-                        System.out.println("Επιτυχια: Ο μαθητης με ID " + id + " διαγράφηκε οριστικά.");
                         break;
                     }
                     case 0 : isRunning = false;

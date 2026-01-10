@@ -74,7 +74,6 @@ public class SqlStudentRepository implements StudentRepository {
     }
 
 
-
     @Override
     public List<Student> findAll() {
         List<Student> students = new ArrayList<>();
@@ -104,15 +103,15 @@ public class SqlStudentRepository implements StudentRepository {
     }
 
     @Override
-    public Optional<Student> findById(Long id) {
-        Objects.requireNonNull(id, "Id can't be null");
+    public Optional<Student> findById(Long studentId) {
+        Objects.requireNonNull(studentId, "Id can't be null");
 
         String query = "SELECT * FROM students WHERE id = ?";
 
         try (Connection conn = DriverManager.getConnection(url, user, password);
              PreparedStatement pstm = conn.prepareStatement(query)) {
 
-            pstm.setLong(1, id);
+            pstm.setLong(1, studentId);
             try (ResultSet rs = pstm.executeQuery()) {
                 if (rs.next()) {
                     Student student = new Student();
@@ -125,7 +124,7 @@ public class SqlStudentRepository implements StudentRepository {
                     if (levelFromDb != null) {
                         student.setLevel(SkillLevel.valueOf(levelFromDb.toUpperCase()));
                     }
-                     return Optional.of(student);
+                    return Optional.of(student);
                 }
             }
             return Optional.empty();
@@ -135,20 +134,49 @@ public class SqlStudentRepository implements StudentRepository {
         }
     }
 
-        @Override
-        public List<Student> findByLastName (String lastName){
-            //TODO
-            return null;
-        }
-
-        @Override
-        public boolean existsById (Long id){
-            return findById(id).isPresent();
-        }
-
-        @Override
-        public void deleteById (Long id){
-            //TODO
-        }
-
+    @Override
+    public List<Student> findByLastName(String lastName) {
+        //TODO
+        return null;
     }
+
+    @Override
+    public boolean existsById(Long studentId) {
+        String query = "SELECT EXISTS (SELECT 1 FROM students WHERE id = ?) AS \"student_exists\"";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement pstm = conn.prepareStatement(query)) {
+
+            pstm.setLong(1, studentId);
+
+            try (ResultSet rs = pstm.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getBoolean("student_exists");
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Σφαλμα" + e.getMessage(), e);
+        }
+
+        return false;
+    }
+
+    @Override
+    public void deleteById(Long studentId) {
+        Objects.requireNonNull(studentId, "StudentId can't be null");
+
+        String query = "DELETE FROM students WHERE id = ? ";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement pstm = conn.prepareStatement(query)) {
+
+            pstm.setLong(1, studentId);
+            pstm.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Σφαλμα κατα την διαγραφη του μαθητη: " + e.getMessage(), e);
+        }
+    }
+
+}
