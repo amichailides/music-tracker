@@ -2,6 +2,7 @@ package io.github.amichailides.service;
 
 import io.github.amichailides.dto.*;
 import io.github.amichailides.model.Lesson;
+import io.github.amichailides.model.SkillLevel;
 import io.github.amichailides.model.Student;
 import io.github.amichailides.repository.LessonRepository;
 import io.github.amichailides.repository.StudentRepository;
@@ -49,7 +50,7 @@ public class Service {
         Student student = studentRepo.findById(studentId)
                 .orElseThrow( () -> new IllegalArgumentException("Δεν υπαρχει μαθητης με id: " + studentId));
 
-        List<Lesson> lessons = lessonRepo.findById(studentId);
+        List<Lesson> lessons = lessonRepo.findByStudentId(studentId);
 
         List<LessonPrintDTO> lessonsPrintList = lessons.stream()
                 .map(l -> LessonPrintDTO.fromEntity(l))
@@ -77,14 +78,14 @@ public class Service {
                 .orElseThrow(() -> new RuntimeException("Student not found"));
         // TODO: Μελλοντικά, μετάτρεψε τη List<Lesson> (Model) σε List<LessonResponseDTO>
         // για να μην εκθέτουμε το Database Entity απευθείας στο UI/API.
-        return lessonRepo.findById(studentId);
+        return lessonRepo.findByStudentId(studentId);
     }
 
     public Optional<StudentProfileDTO> getStudentProfile(Long studentId){
         Objects.requireNonNull(studentId, "studentId can't be null");
         //pull all lessons, create student lesson dto -> StudentProfileDTO,
         return studentRepo.findById(studentId).map(student -> {
-            List<Lesson> lessons = lessonRepo.findById(studentId);
+            List<Lesson> lessons = lessonRepo.findByStudentId(studentId);
 
             return StudentProfileDTO.builder()
                     .studentDetails(StudentPrintDTO.from(student))
@@ -93,5 +94,39 @@ public class Service {
         });
     }
 
+    public StudentUpdateDTO getStudentForUpdate(Long id) {
+        Student s = studentRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        return StudentUpdateDTO.builder()
+                .firstName(s.getFirstName())
+                .lastName(s.getLastName())
+                .email(s.getEmail())
+                .level(s.getLevel().name())
+                .build();
+    }
 
+    public void updateStudent(Long id, StudentUpdateDTO changed) {
+        Objects.requireNonNull(id, "Id can't be null");
+        Objects.requireNonNull(changed, "New data can't be null");
+
+        Student s = studentRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Δεν βρεθηκε μαθητης με id: " + id));
+        if (changed.getFirstName() != null && !changed.getFirstName().isBlank()) {
+            s.setFirstName(changed.getFirstName());
+        }
+
+        if (changed.getLastName() != null && !changed.getLastName().isBlank()) {
+            s.setLastName(changed.getLastName());
+        }
+
+        if (changed.getEmail() != null && !changed.getEmail().isBlank()) {
+            s.setEmail(changed.getEmail());
+        }
+
+        if (changed.getLevel() != null && !changed.getLevel().isBlank()) {
+            s.setLevel(SkillLevel.valueOf(changed.getLevel()));
+        }
+
+        studentRepo.save(s);
+    }
 }

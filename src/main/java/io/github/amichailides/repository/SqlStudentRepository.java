@@ -73,7 +73,6 @@ public class SqlStudentRepository implements StudentRepository {
         return student;
     }
 
-
     @Override
     public List<Student> findAll() {
         List<Student> students = new ArrayList<>();

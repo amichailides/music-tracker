@@ -40,7 +40,7 @@ public class SqlLessonRepository implements LessonRepository {
         return lesson;
     }
 
-    public List<Lesson> findById (Long studentId){
+    public List<Lesson> findByStudentId(Long studentId){
         List<Lesson> lessons = new ArrayList<>();
 
         String query = "SELECT * FROM lessons WHERE student_id = ? ORDER BY lesson_date DESC";
