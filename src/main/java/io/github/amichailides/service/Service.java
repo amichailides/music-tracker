@@ -34,9 +34,9 @@ public class Service {
         return lessonRepo.save(lesson, student.getId());
     }
 
-    public StudentListDTO prepareStudentsForPrint(List<Student> students) {
-        Objects.requireNonNull(students, "Student's can't be null");
+    public StudentListDTO prepareStudentsForPrint() {
 
+        List<Student> students = studentRepo.findAll();
         List<StudentPrintDTO> printList = students.stream()
                 .map(s -> StudentPrintDTO.from(s) )
                 .toList();
@@ -105,7 +105,7 @@ public class Service {
                 .build();
     }
 
-    public void updateStudent(Long id, StudentUpdateDTO changed) {
+    public Long updateStudent(Long id, StudentUpdateDTO changed) {
         Objects.requireNonNull(id, "Id can't be null");
         Objects.requireNonNull(changed, "New data can't be null");
 
@@ -126,7 +126,9 @@ public class Service {
         if (changed.getLevel() != null && !changed.getLevel().isBlank()) {
             s.setLevel(SkillLevel.valueOf(changed.getLevel()));
         }
+        Student updatedStudent = studentRepo.save(s);
 
-        studentRepo.save(s);
+        return updatedStudent.getId();
+
     }
 }

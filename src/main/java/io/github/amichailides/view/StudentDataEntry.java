@@ -15,7 +15,7 @@ public class StudentDataEntry {
         this.scanner = scanner;
     }
 
-    public static StudentCreateDTO collectStudentData(Scanner scanner){
+    public StudentCreateDTO collectStudentData(){
         System.out.print("Ονομα: ");
         String firstName = scanner.nextLine();
         System.out.print("Επωνυμο: ");
@@ -38,7 +38,7 @@ public class StudentDataEntry {
 
 
 
-    public static Long readStudentId(Scanner scanner) {
+    public  Long readStudentId() {
         System.out.print("Εισαγετε το id του Μαθητη: ");
         return Long.parseLong(scanner.nextLine());
     }

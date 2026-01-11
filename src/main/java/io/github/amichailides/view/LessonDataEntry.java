@@ -9,8 +9,13 @@ import java.util.Scanner;
 // 2. Add private final Scanner scanner field.
 // 3. Create a constructor that accepts Scanner.
 public class LessonDataEntry {
+    private Scanner scanner;
 
-    public static LessonCreateDTO collectLessonData(Scanner scanner) {
+    public LessonDataEntry(Scanner scanner) {
+        this.scanner = scanner;
+    }
+
+    public LessonCreateDTO collectLessonData() {
         System.out.println("--- Εισαγωγη Στοιχειων Μαθηματος ---");
         LocalDate date = LocalDate.now();
         System.out.print("Σχολια: ");
