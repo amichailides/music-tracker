@@ -7,29 +7,36 @@ import io.github.amichailides.dto.StudentUpdateDTO;
 import io.github.amichailides.model.SkillLevel;
 import io.github.amichailides.model.Student;
 import io.github.amichailides.service.Service;
+import io.github.amichailides.utils.InputHandler;
+import io.github.amichailides.validation.sanitizers.LevelSanitizer;
+import io.github.amichailides.validation.sanitizers.NameSanitizer;
+import io.github.amichailides.validation.validators.EmailValidator;
+import io.github.amichailides.validation.validators.LevelValidator;
+import io.github.amichailides.validation.validators.NameValidator;
 import io.github.amichailides.view.LessonDataEntry;
 import io.github.amichailides.view.StudentDataEntry;
 import io.github.amichailides.view.StudentPrinter;
 
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class Controller {
     private final Service service;
-    private final Scanner scanner;
+    private final InputHandler inputHandler;
     private final StudentPrinter printer;
     private final LessonDataEntry lessonEntry;
     private final StudentDataEntry studentEntry;
 
 
-    public Controller(Service service, Scanner scanner, StudentPrinter printer, LessonDataEntry lessonEntry, StudentDataEntry studentEntry) {
+    public Controller(Service service, InputHandler inputHandler, StudentPrinter printer, LessonDataEntry lessonEntry, StudentDataEntry studentEntry) {
         this.service = service;
-        this.scanner = scanner;
+        this.inputHandler = inputHandler;
         this.printer = printer;
         this.lessonEntry = lessonEntry;
         this.studentEntry = studentEntry;
     }
-
 
     public void registerStudent () {
         StudentCreateDTO studentDTO = studentEntry.collectStudentData();
@@ -75,34 +82,21 @@ public class Controller {
         }
     }
 
-    public void updateStudent () {
-        Long studentId = studentEntry.readStudentId();
+    public void updateStudent() {
         try {
+            Long studentId = studentEntry.readStudentId();
             StudentUpdateDTO currentData = service.getStudentForUpdate(studentId);
 
-            System.out.println("Εισαγετε νεα δεδομενα " +
-                    "(Πατηστε enter για να κρατησετε την τρεχουσα τιμη ");
+            System.out.println("--- Ενημέρωση Στοιχείων ---");
 
-            System.out.printf("Ονομα [%s]: ", currentData.getFirstName());
-            String newFirstName = scanner.nextLine().trim();
+            String newFirstName = readOptional("Όνομα", currentData.getFirstName(), NameSanitizer::clean, NameValidator::isValid);
+            String newLastName = readOptional("Επώνυμο", currentData.getLastName(), NameSanitizer::clean, NameValidator::isValid);
+            String newEmail = readOptional("Email", currentData.getEmail(), NameSanitizer::clean, EmailValidator::isValid);
 
-            System.out.printf("Επωνυμο [%s]: ", currentData.getLastName());
-            String newLastName = scanner.nextLine().trim();
+            String newLevel = readOptional("Level", currentData.getLevel(), LevelSanitizer::clean, LevelValidator::isValid);
 
 
-            System.out.printf("Email [%s]: ", currentData.getEmail());
-            String newEmail = scanner.nextLine().trim();
 
-            String newLevel;
-            while (true){
-                System.out.printf("Level (BEGINNER, INTERMEDIATE, ADVANCED) [%s]: ", currentData.getLevel());
-                newLevel = scanner.nextLine().trim().toUpperCase();
-
-                if (newLevel.isBlank() || SkillLevel.isValid(newLevel)) {
-                    break;
-                }
-                System.out.printf("To level %s δεν ειναι εγκυρο", newLevel);
-            }
 
 
             StudentUpdateDTO changedDTO = StudentUpdateDTO.builder()
@@ -119,6 +113,21 @@ public class Controller {
         } catch (RuntimeException e) {
             System.out.println("Σφαλμα: " + e.getMessage());
         }
+    }
+
+    private String readOptional(
+            String label,
+            String currentValue,
+            Function<String, String> sanitizer,
+            Predicate<String> validator) {
+
+        String input = inputHandler.readValidated(
+                String.format("%s [%s]: ", label, currentValue),
+                sanitizer,
+                val -> val.isBlank() || validator.test(val),
+                "Λάθος μορφή! Ξαναπροσπάθησε ή πάτα Enter για παράκαμψη."
+        );
+        return input.isBlank() ? currentValue : input;
     }
 
 }

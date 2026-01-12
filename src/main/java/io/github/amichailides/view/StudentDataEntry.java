@@ -3,43 +3,76 @@ package io.github.amichailides.view;
 import io.github.amichailides.dto.LessonCreateDTO;
 import io.github.amichailides.dto.StudentCreateDTO;
 import io.github.amichailides.model.SkillLevel;
+import io.github.amichailides.utils.InputHandler;
+import io.github.amichailides.validation.ValidationConstants;
+import io.github.amichailides.validation.sanitizers.LevelSanitizer;
+import io.github.amichailides.validation.sanitizers.MobileSanitizer;
+import io.github.amichailides.validation.sanitizers.NameSanitizer;
+import io.github.amichailides.validation.validators.EmailValidator;
+import io.github.amichailides.validation.validators.LevelValidator;
+import io.github.amichailides.validation.validators.MobileValidator;
+import io.github.amichailides.validation.validators.NameValidator;
+
 
 import java.time.LocalDate;
 import java.util.Scanner;
 
 
 public class StudentDataEntry {
-    private final Scanner scanner;
+    private final InputHandler inputHandler;
+    public StudentDataEntry( InputHandler inputHandler) {
 
-    public StudentDataEntry(Scanner scanner) {
-        this.scanner = scanner;
+        this.inputHandler = inputHandler;
     }
 
-    public StudentCreateDTO collectStudentData(){
-        System.out.print("Ονομα: ");
-        String firstName = scanner.nextLine();
-        System.out.print("Επωνυμο: ");
-        String lastName = scanner.nextLine();
-        System.out.print("Διευθυνση Email: ");
-        String mail = scanner.nextLine();
-        System.out.print("Αριθμος κινητου: ");
-        String mobile = scanner.nextLine();
-        System.out.println("Επιπεδο: ");
-        System.out.print("(BEGINNER | INTERMEDIATE | ADVANCED)");
-        SkillLevel level = SkillLevel.valueOf(scanner.nextLine().toUpperCase());
+    public  Long readStudentId() {
+        return inputHandler.readLong("Πληκτρολογειστε το ID του μαθητη");
+    }
+
+
+
+    public StudentCreateDTO collectStudentData() {
+        String firstName = inputHandler.readValidated("Πληκτρολογηστε ονομα: ",
+                NameSanitizer::clean,
+                NameValidator::isValid,
+                ValidationConstants.INVALID_FIRST_NAME
+        );
+
+        String lastName = inputHandler.readValidated("Πληκτρολογηστε επιθετο: ",
+                NameSanitizer::clean,
+                NameValidator::isValid,
+                ValidationConstants.INVALID_LAST_NAME
+        );
+
+        String email = inputHandler.readValidated("Πληκτρολογηστε E-mail:",
+                NameSanitizer::clean,
+                EmailValidator::isValid,
+                ValidationConstants.INVALID_EMAIL
+                // TODO: Να υλοποιηθεί μηχανισμός για συγκεκριμένα μηνύματα σφάλματος
+                // (π.χ. "Λείπει το @", "Περιέχει κενά", κτλ) ανάλογα με την αποτυχία του Validator.
+        );
+
+        String mobile = inputHandler.readValidated("Πληκτρολογηστε αριθμο κινητου: (+30)",
+                MobileSanitizer::clean,
+                MobileValidator::isValid,
+                ValidationConstants.INVALID_PHONE
+        );
+
+        String level = inputHandler.readValidated("Πληκτρολογηστε επιπεδο: (BEGINNER | INTERMEDIATE | ADVANCED ",
+                LevelSanitizer::clean,
+                LevelValidator::isValid,
+                ValidationConstants.INVALID_LEVEL
+        );
+
+
+
         return StudentCreateDTO.builder()
                 .firstName(firstName)
                 .lastName(lastName)
-                .email(mail)
+                .email(email)
                 .mobile(mobile)
-                .level(level)
+                .level(SkillLevel.valueOf(level))
                 .build();
-    }
 
-
-
-    public  Long readStudentId() {
-        System.out.print("Εισαγετε το id του Μαθητη: ");
-        return Long.parseLong(scanner.nextLine());
     }
 }

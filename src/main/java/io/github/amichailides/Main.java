@@ -7,6 +7,7 @@ import io.github.amichailides.repository.SqlLessonRepository;
 import io.github.amichailides.repository.StudentRepository;
 import io.github.amichailides.repository.SqlStudentRepository;
 import io.github.amichailides.service.Service;
+import io.github.amichailides.utils.InputHandler;
 import io.github.amichailides.view.LessonDataEntry;
 import io.github.amichailides.view.StudentDataEntry;
 import io.github.amichailides.view.StudentPrinter;
@@ -21,9 +22,16 @@ public class Main {
         Service service = new Service(studentRepo, lessonRepo);
         StudentPrinter printer = new StudentPrinter();
         Scanner scanner = new Scanner(System.in);
+        InputHandler inputHandler = new InputHandler(scanner);
+        StudentDataEntry studentEntry = new StudentDataEntry(inputHandler);
         LessonDataEntry lessonEntry = new LessonDataEntry(scanner);
-        StudentDataEntry studentEntry = new StudentDataEntry(scanner);
-        Controller controller = new Controller(service, scanner,printer, lessonEntry, studentEntry);
+
+        Controller controller = new Controller(
+                service,
+                inputHandler,
+                printer,
+                lessonEntry,
+                studentEntry);
 
         boolean isRunning = true;
 
