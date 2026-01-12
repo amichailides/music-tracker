@@ -92,7 +92,7 @@ public class Controller {
             String newFirstName = readOptional("Όνομα", currentData.getFirstName(), NameSanitizer::clean, NameValidator::isValid);
             String newLastName = readOptional("Επώνυμο", currentData.getLastName(), NameSanitizer::clean, NameValidator::isValid);
             String newEmail = readOptional("Email", currentData.getEmail(), NameSanitizer::clean, EmailValidator::isValid);
-
+            // TODO: Να προστεθεί η ανάγνωση του mobile (readOptional) και η εισαγωγή του στον Builder παρακάτω
             String newLevel = readOptional("Level", currentData.getLevel(), LevelSanitizer::clean, LevelValidator::isValid);
 
 
