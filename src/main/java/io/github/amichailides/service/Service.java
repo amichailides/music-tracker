@@ -101,6 +101,7 @@ public class Service {
                 .firstName(s.getFirstName())
                 .lastName(s.getLastName())
                 .email(s.getEmail())
+                .mobile(s.getMobile())
                 .level(s.getLevel().name())
                 .build();
     }
@@ -123,6 +124,9 @@ public class Service {
             s.setEmail(changed.getEmail());
         }
 
+        if (changed.getMobile() != null && !changed.getMobile().isBlank()) {
+            s.setMobile(changed.getMobile());
+        }
         if (changed.getLevel() != null && !changed.getLevel().isBlank()) {
             s.setLevel(SkillLevel.valueOf(changed.getLevel()));
         }

@@ -6,7 +6,7 @@ import io.github.amichailides.utils.InputHandler;
 import io.github.amichailides.validation.ValidationConstants;
 import io.github.amichailides.validation.sanitizers.LevelSanitizer;
 import io.github.amichailides.validation.sanitizers.MobileSanitizer;
-import io.github.amichailides.validation.sanitizers.NameSanitizer;
+import io.github.amichailides.validation.sanitizers.StringSanitizer;
 import io.github.amichailides.validation.validators.EmailValidator;
 import io.github.amichailides.validation.validators.LevelValidator;
 import io.github.amichailides.validation.validators.MobileValidator;
@@ -29,19 +29,19 @@ public class StudentDataEntry {
 
     public StudentCreateDTO collectStudentData() {
         String firstName = inputHandler.readValidated("Πληκτρολογηστε ονομα: ",
-                NameSanitizer::clean,
+                StringSanitizer::clean,
                 NameValidator::isValid,
                 ValidationConstants.INVALID_FIRST_NAME
         );
 
         String lastName = inputHandler.readValidated("Πληκτρολογηστε επιθετο: ",
-                NameSanitizer::clean,
+                StringSanitizer::clean,
                 NameValidator::isValid,
                 ValidationConstants.INVALID_LAST_NAME
         );
 
         String email = inputHandler.readValidated("Πληκτρολογηστε E-mail:",
-                NameSanitizer::clean,
+                StringSanitizer::clean,
                 EmailValidator::isValid,
                 ValidationConstants.INVALID_EMAIL
                 // TODO: Να υλοποιηθεί μηχανισμός για συγκεκριμένα μηνύματα σφάλματος

@@ -4,14 +4,15 @@ import io.github.amichailides.dto.LessonCreateDTO;
 import io.github.amichailides.dto.StudentCreateDTO;
 import io.github.amichailides.dto.StudentListDTO;
 import io.github.amichailides.dto.StudentUpdateDTO;
-import io.github.amichailides.model.SkillLevel;
 import io.github.amichailides.model.Student;
 import io.github.amichailides.service.Service;
 import io.github.amichailides.utils.InputHandler;
 import io.github.amichailides.validation.sanitizers.LevelSanitizer;
-import io.github.amichailides.validation.sanitizers.NameSanitizer;
+import io.github.amichailides.validation.sanitizers.MobileSanitizer;
+import io.github.amichailides.validation.sanitizers.StringSanitizer;
 import io.github.amichailides.validation.validators.EmailValidator;
 import io.github.amichailides.validation.validators.LevelValidator;
+import io.github.amichailides.validation.validators.MobileValidator;
 import io.github.amichailides.validation.validators.NameValidator;
 import io.github.amichailides.view.LessonDataEntry;
 import io.github.amichailides.view.StudentDataEntry;
@@ -88,10 +89,10 @@ public class Controller {
 
             System.out.println("--- Ενημέρωση Στοιχείων ---");
 
-            String newFirstName = readOptional("Όνομα", currentData.getFirstName(), NameSanitizer::clean, NameValidator::isValid);
-            String newLastName = readOptional("Επώνυμο", currentData.getLastName(), NameSanitizer::clean, NameValidator::isValid);
-            String newEmail = readOptional("Email", currentData.getEmail(), NameSanitizer::clean, EmailValidator::isValid);
-            // TODO: Να προστεθεί η ανάγνωση του mobile (readOptional) και η εισαγωγή του στον Builder παρακάτω
+            String newFirstName = readOptional("Όνομα", currentData.getFirstName(), StringSanitizer::clean, NameValidator::isValid);
+            String newLastName = readOptional("Επώνυμο", currentData.getLastName(), StringSanitizer::clean, NameValidator::isValid);
+            String newEmail = readOptional("Email", currentData.getEmail(), StringSanitizer::clean, EmailValidator::isValid);
+            String newMobile = readOptional("Κινητο: ", currentData.getMobile(), StringSanitizer::clean, MobileValidator::isValid);
             String newLevel = readOptional("Level", currentData.getLevel(), LevelSanitizer::clean, LevelValidator::isValid);
 
 
@@ -102,12 +103,13 @@ public class Controller {
                     .firstName(newFirstName)
                     .lastName(newLastName)
                     .email(newEmail)
+                    .mobile(newMobile)
                     .level(newLevel)
                     .build();
 
             studentId = service.updateStudent(studentId, changedDTO);
 
-            System.out.printf("Ο μαθητης με id: %d ενημερωθηκε επιτυχως", studentId);
+            System.out.printf("Ο μαθητης με id: %d ενημερωθηκε επιτυχως%n", studentId);
 
         } catch (RuntimeException e) {
             System.out.println("Σφαλμα: " + e.getMessage());

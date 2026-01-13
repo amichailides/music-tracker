@@ -1,7 +1,7 @@
 package io.github.amichailides.validation.sanitizers;
 
-public class NameSanitizer {
-    private NameSanitizer(){};
+public class StringSanitizer {
+    private StringSanitizer(){};
 
 
     public static String clean(String input) {

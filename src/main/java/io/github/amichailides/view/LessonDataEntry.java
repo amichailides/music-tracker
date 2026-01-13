@@ -2,7 +2,7 @@ package io.github.amichailides.view;
 
 import io.github.amichailides.dto.LessonCreateDTO;
 import io.github.amichailides.utils.InputHandler;
-import io.github.amichailides.validation.sanitizers.NameSanitizer;
+import io.github.amichailides.validation.sanitizers.StringSanitizer;
 
 import java.time.LocalDate;
 import java.util.Scanner;
@@ -36,7 +36,7 @@ public class LessonDataEntry {
 
          String rawComments = inputHandler.readValidated(
                  "Σχολια μαθηματος [Enter για skip]: ",
-                 NameSanitizer::clean,
+                 StringSanitizer::clean,
                  commentsText -> true, // Δεν χρειαζομαι validation στα comments
                  "" // ουτε error message, θα περασει αερα !
          );
@@ -45,7 +45,7 @@ public class LessonDataEntry {
 
          String rawHomework = inputHandler.readValidated(
                  "Εργασία για το σπίτι [Enter για skip]: ",
-                 NameSanitizer::clean,
+                 StringSanitizer::clean,
                  homeworkText -> true,
                  ""
          );
