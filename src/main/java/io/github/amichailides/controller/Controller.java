@@ -18,7 +18,6 @@ import io.github.amichailides.view.StudentDataEntry;
 import io.github.amichailides.view.StudentPrinter;
 
 import java.util.NoSuchElementException;
-import java.util.Scanner;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -51,8 +50,8 @@ public class Controller {
     }
 
     public void addLessonToStudent () {
-        LessonCreateDTO lessonDTO = lessonEntry.collectLessonData();
         Long studentId = studentEntry.readStudentId();
+        LessonCreateDTO lessonDTO = lessonEntry.collectLessonData();
         service.addLesson(studentId, lessonDTO);
         System.out.println("Η εγγραφη του μαθηματος ολοκληρωθηκε με επιτυχια");
 

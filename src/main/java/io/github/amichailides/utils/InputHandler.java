@@ -33,9 +33,13 @@ public class InputHandler {
             System.out.print(prompt);
             String input = scanner.nextLine(); // Διαβάζουμε ως String για ασφάλεια
             try {
-                return Long.parseLong(input); // Προσπάθεια μετατροπής σε Long
+                long value = Long.parseLong(input);
+                if (value > 0) {
+                    return value;
+                }
+                System.err.println("Σφαλμα: To ID πρεπει να ειναι θετικος αριθμος.");
             } catch (NumberFormatException e) {
-                System.err.println("Λάθος! Παρακαλώ εισάγετε έναν έγκυρο αριθμό.");
+                System.err.println("Σφαλμα: Παρακαλώ εισάγετε έναν έγκυρο αριθμό.");
             }
         }
     }

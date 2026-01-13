@@ -1,6 +1,5 @@
 package io.github.amichailides.view;
 
-import io.github.amichailides.dto.LessonCreateDTO;
 import io.github.amichailides.dto.StudentCreateDTO;
 import io.github.amichailides.model.SkillLevel;
 import io.github.amichailides.utils.InputHandler;
@@ -14,9 +13,6 @@ import io.github.amichailides.validation.validators.MobileValidator;
 import io.github.amichailides.validation.validators.NameValidator;
 
 
-import java.time.LocalDate;
-import java.util.Scanner;
-
 
 public class StudentDataEntry {
     private final InputHandler inputHandler;
@@ -26,7 +22,7 @@ public class StudentDataEntry {
     }
 
     public  Long readStudentId() {
-        return inputHandler.readLong("Πληκτρολογειστε το ID του μαθητη");
+        return inputHandler.readLong("Πληκτρολογειστε το ID του μαθητη: ");
     }
 
 

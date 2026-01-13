@@ -24,7 +24,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         InputHandler inputHandler = new InputHandler(scanner);
         StudentDataEntry studentEntry = new StudentDataEntry(inputHandler);
-        LessonDataEntry lessonEntry = new LessonDataEntry(scanner);
+        LessonDataEntry lessonEntry = new LessonDataEntry(inputHandler);
 
         Controller controller = new Controller(
                 service,
