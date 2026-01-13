@@ -1,6 +1,7 @@
 package io.github.amichailides.model;
 
 import io.github.amichailides.dto.StudentCreateDTO;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,13 +14,21 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Entity
+@Table(name = "students")
 public class Student {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String firstName;
     private String lastName;
     private String email;
     private String mobile;
+    @Enumerated(EnumType.STRING)
     private SkillLevel level;
+
+    @OneToMany(mappedBy = "student")
     @Builder.Default
     private List<Lesson> lessons = new ArrayList<>();
 
@@ -32,7 +41,5 @@ public class Student {
                 .mobile(dto.getMobile())
                 .level(dto.getLevel())
                 .build();
-
     }
-
 }
