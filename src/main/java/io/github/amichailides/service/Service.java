@@ -44,24 +44,6 @@ public class Service {
        return new StudentListDTO(printList);
     }
 
-    public LessonListDTO prepareLessonsForPrint(Long studentId) {
-        Objects.requireNonNull(studentId, "Id can't be null");
-
-        Student student = studentRepo.findById(studentId)
-                .orElseThrow( () -> new IllegalArgumentException("Δεν υπαρχει μαθητης με id: " + studentId));
-
-        List<Lesson> lessons = lessonRepo.findByStudentId(studentId);
-
-        List<LessonPrintDTO> lessonsPrintList = lessons.stream()
-                .map(l -> LessonPrintDTO.fromEntity(l))
-                .toList();
-
-        return new LessonListDTO(
-                lessonsPrintList,
-                student.getFirstName() + " " + student.getLastName(),
-                student.getLevel().toString());
-    }
-
     public void deleteStudent(Long id) {
         Objects.requireNonNull(id, "id can't be null");
 
@@ -69,16 +51,6 @@ public class Service {
             throw new NoSuchElementException("Ο μαθητής δεν βρέθηκε.");
         }
         studentRepo.deleteById(id);
-    }
-
-    public List<Lesson> getStudentHistory(Long studentId){
-        Objects.requireNonNull(studentId, "Student id can't be null");
-
-        studentRepo.findById(studentId)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
-        // TODO: Μελλοντικά, μετάτρεψε τη List<Lesson> (Model) σε List<LessonResponseDTO>
-        // για να μην εκθέτουμε το Database Entity απευθείας στο UI/API.
-        return lessonRepo.findByStudentId(studentId);
     }
 
     public Optional<StudentProfileDTO> getStudentProfile(Long studentId){

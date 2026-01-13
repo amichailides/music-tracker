@@ -3,34 +3,16 @@ package io.github.amichailides.view;
 import io.github.amichailides.dto.LessonCreateDTO;
 import io.github.amichailides.utils.InputHandler;
 import io.github.amichailides.validation.sanitizers.StringSanitizer;
-
 import java.time.LocalDate;
-import java.util.Scanner;
+
 
 public class LessonDataEntry {
     private final InputHandler inputHandler;
-    private Scanner scanner;
 
     public LessonDataEntry(InputHandler inputHandler) {
         this.inputHandler = inputHandler;
-        this.scanner = scanner;
     }
-    /*
-    public LessonCreateDTO collectLessonData() {
-        System.out.println("--- Εισαγωγη Στοιχειων Μαθηματος ---");
-        LocalDate date = LocalDate.now();
-        System.out.print("Σχολια: ");
-        String comments = scanner.nextLine();
-        System.out.print("Ασκησεις για το σπιτι: ");
-        String homework = scanner.nextLine();
 
-        return LessonCreateDTO.builder()
-                .date(date)
-                .comments(comments)
-                .homework(homework)
-                .build();
-    }
-    */
      public LessonCreateDTO collectLessonData() {
          LocalDate date = LocalDate.now();
 

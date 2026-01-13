@@ -1,6 +1,5 @@
 package io.github.amichailides.utils;
 
-import javax.xml.validation.Validator;
 import java.util.Scanner;
 import java.util.function.Function;
 import java.util.function.Predicate;

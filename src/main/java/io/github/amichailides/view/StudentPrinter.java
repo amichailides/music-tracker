@@ -1,7 +1,7 @@
 package io.github.amichailides.view;
 
 import io.github.amichailides.dto.*;
-import io.github.amichailides.model.Lesson;
+
 
 import java.util.List;
 
@@ -25,28 +25,6 @@ public class StudentPrinter {
                     s.getLevel());
         }
         System.out.println("----------------------------------------------------------------------------");
-    }
-
-    public void printStudentLessons(LessonListDTO dto) {
-        if (dto == null || dto.getLessons() == null || dto.getLessons().isEmpty()){
-            System.out.println("Δεν βρέθηκαν μαθήματα για εκτύπωση.");
-            return;
-        }
-
-
-        System.out.printf("%-20s | %-10s %n%n", dto.getName(), dto.getLevel());
-        //TODO implementation for fat comments - homework -> new line
-
-        System.out.println("------------------------------------------------------------------------------------------------");
-        System.out.printf("%-20s | %-35s | %-35s %n", "ΗΜΕΡΟΜΗΝΙΑ", "ΑΣΚΗΣΕΙΣ", "ΣΧΟΛΙΑ");
-        System.out.println("------------------------------------------------------------------------------------------------");
-
-        for (LessonPrintDTO l : dto.getLessons()){
-            System.out.printf("%-20s | %-35s | %-35s %n",
-                    l.getDate(), l.getHomework(), l.getComments());
-        }
-
-
     }
 
     public void printFullProfile (StudentProfileDTO profile){
