@@ -36,6 +36,14 @@ public class JpaStudentRepository implements StudentRepository{
         }
     }
 
+    @Override
+    public Optional<Student> findById(Long studentId){
+        try (EntityManager em = JpaUtil.getEntityManager()){
+            Student student = em.find(Student.class, studentId);
+            return Optional.ofNullable(student);  // no NullPointException return
+        }
+    }
+
 
 
 }
