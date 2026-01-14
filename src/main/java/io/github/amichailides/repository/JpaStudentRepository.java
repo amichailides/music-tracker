@@ -3,8 +3,6 @@ package io.github.amichailides.repository;
 import io.github.amichailides.model.Student;
 import io.github.amichailides.utils.JpaUtil;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -55,7 +53,7 @@ public class JpaStudentRepository implements StudentRepository{
                     em.getTransaction().commit();
                     return true;
                 }
-
+                em.getTransaction().commit();
                 return false;
             }catch (Exception e) {
                 // if something goes badly, αναιρει οτι εχει προλαβει να εκτελεσει
@@ -79,9 +77,13 @@ public class JpaStudentRepository implements StudentRepository{
     }
 
     @Override
-    public List<Student> findByLastName(String Lastname) {
-        //TODO
-        return null;
+    public List<Student> findByLastName(String lastName) {
+        try (EntityManager em = JpaUtil.getEntityManager()){
+
+            return em.createQuery("SELECT s FROM Student s WHERE s.lastName = :lastName", Student.class)
+                    .setParameter("lastName", lastName )
+                    .getResultList();
+        }
     }
 
 }
