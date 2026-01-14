@@ -5,6 +5,9 @@ import io.github.amichailides.utils.JpaUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
 
+import java.util.List;
+import java.util.Optional;
+
 public class JpaStudentRepository implements StudentRepository{
 
     @Override
@@ -24,4 +27,15 @@ public class JpaStudentRepository implements StudentRepository{
 
         return student;
     }
+
+    @Override
+    public List<Student>  findAll() {
+        try (EntityManager em = JpaUtil.getEntityManager()){
+            return em.createQuery("SELECT s FROM Student s", Student.class)
+                    .getResultList();
+        }
+    }
+
+
+
 }
