@@ -67,4 +67,21 @@ public class JpaStudentRepository implements StudentRepository{
         }
     }
 
+    @Override
+    public boolean existsById(Long studentId) {
+        try (EntityManager em = JpaUtil.getEntityManager()){
+            //  s.id = indexed , instant pull . δεν τρεχει ολη την βαση
+            Long count = em.createQuery("SELECT COUNT(s) FROM Student s WHERE s.id = :id", Long.class)
+                    .setParameter("id", studentId )
+                    .getSingleResult();
+            return count > 0;
+        }
+    }
+
+    @Override
+    public List<Student> findByLastName(String Lastname) {
+        //TODO
+        return null;
+    }
+
 }

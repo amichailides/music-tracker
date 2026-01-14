@@ -47,10 +47,13 @@ public class Service {
     public void deleteStudent(Long id) {
         Objects.requireNonNull(id, "id can't be null");
 
-        if (!studentRepo.existsById(id)) {
+        boolean deleted = studentRepo.deleteById(id);
+
+        if (!deleted) {
             throw new NoSuchElementException("Ο μαθητής δεν βρέθηκε.");
         }
-        studentRepo.deleteById(id);
+
+
     }
 
     public Optional<StudentProfileDTO> getStudentProfile(Long studentId){
