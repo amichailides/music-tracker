@@ -18,8 +18,14 @@ public class Lesson {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "lesson_date")
     private LocalDate date;
+
+    @Column(name = "lesson_comments")
     private String comments;
+
+    @Column(name = "homework")
     private String homework;
 
     @ManyToOne

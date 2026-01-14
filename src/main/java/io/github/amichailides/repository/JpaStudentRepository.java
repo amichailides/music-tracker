@@ -13,8 +13,11 @@ public class JpaStudentRepository implements StudentRepository{
         try (EntityManager em = JpaUtil.getEntityManager()){
             try {
                 em.getTransaction().begin();
-                em.persist(student);
+                //persist only new write | merge if !exists insert new , if exists updates
+                // αποθηκευουμε το merge για να μας δωσει πισω το instance με το id απο την βαση
+                student = em.merge(student);
                 em.getTransaction().commit();
+
             } catch (Exception e) {
                 if (em.getTransaction().isActive()) {
                     em.getTransaction().rollback();

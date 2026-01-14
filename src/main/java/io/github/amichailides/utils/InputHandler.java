@@ -27,19 +27,29 @@ public class InputHandler {
         }
     }
 
-    public Long readLong(String prompt) {
+    public Long readLong(String prompt,
+                         Predicate<Long> validator,
+                         String errorMessage)  {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine(); // Διαβάζουμε ως String για ασφάλεια
             try {
                 long value = Long.parseLong(input);
-                if (value > 0) {
+                if (validator.test(value)){
                     return value;
                 }
-                System.err.println("Σφαλμα: To ID πρεπει να ειναι θετικος αριθμος.");
+                System.err.println(errorMessage);
             } catch (NumberFormatException e) {
                 System.err.println("Σφαλμα: Παρακαλώ εισάγετε έναν έγκυρο αριθμό.");
             }
+        }
+    }
+
+    public String readString(String prompt){
+        while (true){
+            System.out.println(prompt);
+            String input = scanner.nextLine().trim();
+
         }
     }
 

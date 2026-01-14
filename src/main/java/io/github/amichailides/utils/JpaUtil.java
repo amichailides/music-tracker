@@ -21,7 +21,7 @@ public class JpaUtil {
             properties.put("jakarta.persistence.jdbc.user", dbUser);
             properties.put("jakarta.persistence.jdbc.password", dbPassword);
 
-            EMF = Persistence.createEntityManagerFactory("myPostgresUnit", properties);
+            EMF = Persistence.createEntityManagerFactory("musicTrackerUnit", properties);
         } catch (Throwable ex) {
             System.err.println("Initial EntityManagerFactory creation failed." + ex);
             throw new ExceptionInInitializerError(ex);

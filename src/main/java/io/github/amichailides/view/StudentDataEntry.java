@@ -7,11 +7,7 @@ import io.github.amichailides.validation.ValidationConstants;
 import io.github.amichailides.validation.sanitizers.LevelSanitizer;
 import io.github.amichailides.validation.sanitizers.MobileSanitizer;
 import io.github.amichailides.validation.sanitizers.StringSanitizer;
-import io.github.amichailides.validation.validators.EmailValidator;
-import io.github.amichailides.validation.validators.LevelValidator;
-import io.github.amichailides.validation.validators.MobileValidator;
-import io.github.amichailides.validation.validators.NameValidator;
-
+import io.github.amichailides.validation.validators.*;
 
 
 public class StudentDataEntry {
@@ -22,10 +18,12 @@ public class StudentDataEntry {
     }
 
     public  Long readStudentId() {
-        return inputHandler.readLong("Πληκτρολογειστε το ID του μαθητη: ");
+       // return inputHandler.readLong("Πληκτρολογειστε το ID του μαθητη: ");
+        return inputHandler.readLong(
+                "Πληκτρολογειστε το ID του μαθητη: ",
+                IdValidator::isValid,
+                ValidationConstants.INVALID_ID);
     }
-
-
 
     public StudentCreateDTO collectStudentData() {
         String firstName = inputHandler.readValidated("Πληκτρολογηστε ονομα: ",
@@ -40,7 +38,7 @@ public class StudentDataEntry {
                 ValidationConstants.INVALID_LAST_NAME
         );
 
-        String email = inputHandler.readValidated("Πληκτρολογηστε E-mail:",
+        String email = inputHandler.readValidated("Πληκτρολογηστε E-mail: ",
                 StringSanitizer::clean,
                 EmailValidator::isValid,
                 ValidationConstants.INVALID_EMAIL
@@ -48,13 +46,13 @@ public class StudentDataEntry {
                 // (π.χ. "Λείπει το @", "Περιέχει κενά", κτλ) ανάλογα με την αποτυχία του Validator.
         );
 
-        String mobile = inputHandler.readValidated("Πληκτρολογηστε αριθμο κινητου: (+30)",
+        String mobile = inputHandler.readValidated("Πληκτρολογηστε αριθμο κινητου [+30]: ",
                 MobileSanitizer::clean,
                 MobileValidator::isValid,
                 ValidationConstants.INVALID_PHONE
         );
 
-        String level = inputHandler.readValidated("Πληκτρολογηστε επιπεδο: (BEGINNER | INTERMEDIATE | ADVANCED ",
+        String level = inputHandler.readValidated("Πληκτρολογηστε επιπεδο [BEGINNER | INTERMEDIATE | ADVANCED]: ",
                 LevelSanitizer::clean,
                 LevelValidator::isValid,
                 ValidationConstants.INVALID_LEVEL

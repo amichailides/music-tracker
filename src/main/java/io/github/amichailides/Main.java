@@ -2,10 +2,7 @@ package io.github.amichailides;
 
 import io.github.amichailides.controller.Controller;
 import io.github.amichailides.dto.*;
-import io.github.amichailides.repository.LessonRepository;
-import io.github.amichailides.repository.SqlLessonRepository;
-import io.github.amichailides.repository.StudentRepository;
-import io.github.amichailides.repository.SqlStudentRepository;
+import io.github.amichailides.repository.*;
 import io.github.amichailides.service.Service;
 import io.github.amichailides.utils.InputHandler;
 import io.github.amichailides.view.LessonDataEntry;
@@ -16,8 +13,11 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        // Στην αρχή της public static void main
+        java.util.logging.Logger.getLogger("org.hibernate").setLevel(java.util.logging.Level.SEVERE);
         //IStudentRepository repository = new InMemoryRepository();
-        StudentRepository studentRepo = new SqlStudentRepository();
+        //StudentRepository studentRepo = new SqlStudentRepository();
+        StudentRepository studentRepo = new JpaStudentRepository();
         LessonRepository lessonRepo = new SqlLessonRepository();
         Service service = new Service(studentRepo, lessonRepo);
         StudentPrinter printer = new StudentPrinter();
@@ -46,6 +46,7 @@ public class Main {
                     case 4 -> controller.displayStudentLessons();
                     case 5 -> controller.deleteStudent();
                     case 6 -> controller.updateStudent();
+                    case 7 -> controller.searchStudentByLastName();
                     case 0 -> isRunning = false;
                 }
 
