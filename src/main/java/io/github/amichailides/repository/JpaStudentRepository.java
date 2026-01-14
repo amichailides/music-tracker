@@ -44,6 +44,27 @@ public class JpaStudentRepository implements StudentRepository{
         }
     }
 
+    @Override
+    public boolean deleteById (Long studentId) {
+        try (EntityManager em = JpaUtil.getEntityManager()){
+            try {
+                em.getTransaction().begin();
+                Student student = em.find(Student.class, studentId);
+                if (student != null){
+                    em.remove(student);
+                    em.getTransaction().commit();
+                    return true;
+                }
 
+                return false;
+            }catch (Exception e) {
+                // if something goes badly, αναιρει οτι εχει προλαβει να εκτελεσει
+                if (em.getTransaction().isActive()) {
+                    em.getTransaction().rollback();
+                }
+                throw e;
+            }
+        }
+    }
 
 }

@@ -40,7 +40,7 @@ public class InMemoryRepository implements StudentRepository {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public boolean deleteById(Long id) {
         database.remove(id); // Απλό και γρήγορο στο Map
     }
 

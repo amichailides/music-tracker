@@ -10,6 +10,6 @@ public interface StudentRepository {
     List<Student> findByLastName (String Lastname);
     Optional<Student> findById (Long studentId);
     List<Student> findAll();
-    void deleteById(Long studentId);
+    boolean deleteById(Long studentId);
     boolean existsById(Long studentId);
 }
