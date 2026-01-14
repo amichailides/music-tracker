@@ -28,8 +28,9 @@ public class Student {
     @Enumerated(EnumType.STRING)
     private SkillLevel level;
 
-    @OneToMany(mappedBy = "student")
-    @Builder.Default
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true )
+    @Builder.Default // if no insert -> builder inserts new ArrayList<>(); -> no NullPointException
     private List<Lesson> lessons = new ArrayList<>();
 
     public static Student createFromDTO(StudentCreateDTO dto) {
