@@ -18,6 +18,7 @@ import io.github.amichailides.view.StudentDataEntry;
 import io.github.amichailides.view.StudentPrinter;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -120,12 +121,21 @@ public class Controller {
             String label,
             String currentValue,
             Function<String, String> sanitizer,
-            Predicate<String> validator) {
+            Function<String, Optional<String>> validator) {
+
+        // αν δωσει κενο "" η readValidated βλεπει το empty() και εμφανιζει "λαθος ξαναπροσπαθησε"
+        // δινουμε έναν τοπικο validator που επιτρεπει τα κενα
+        Function<String, Optional<String>> optionalValidator = input -> {
+            if (input.isBlank()) {
+                return Optional.of(input); // if blank, περνα το
+            }
+            return validator.apply(input); // Αλλιως καλεσε τον κανονικο validator (κοιτα κατω!)
+        };
 
         String input = inputHandler.readValidated(
                 String.format("%s [%s]: ", label, currentValue),
                 sanitizer,
-                val -> val.isBlank() || validator.test(val),
+                optionalValidator,
                 "Λάθος μορφή! Ξαναπροσπάθησε ή πάτα Enter για παράκαμψη."
         );
         return input.isBlank() ? currentValue : input;

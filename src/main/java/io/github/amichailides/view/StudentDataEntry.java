@@ -4,9 +4,7 @@ import io.github.amichailides.dto.StudentCreateDTO;
 import io.github.amichailides.model.SkillLevel;
 import io.github.amichailides.utils.InputHandler;
 import io.github.amichailides.validation.ValidationConstants;
-import io.github.amichailides.validation.sanitizers.LevelSanitizer;
-import io.github.amichailides.validation.sanitizers.MobileSanitizer;
-import io.github.amichailides.validation.sanitizers.StringSanitizer;
+import io.github.amichailides.validation.sanitizers.*;
 import io.github.amichailides.validation.validators.*;
 
 
@@ -21,8 +19,17 @@ public class StudentDataEntry {
        // return inputHandler.readLong("Πληκτρολογειστε το ID του μαθητη: ");
         return inputHandler.readLong(
                 "Πληκτρολογειστε το ID του μαθητη: ",
-                IdValidator::isValid,
+                IdSanitizer::clean,
+                IdValidator::validateAndParse,
                 ValidationConstants.INVALID_ID);
+    }
+
+    public String readStudentLastname() {
+        return inputHandler.readString("Πληκτρολογειστε το επιθετο του μαθητη:",
+                NameSanitizer::clean,
+                NameValidator::isValid,
+                ValidationConstants.INVALID_LAST_NAME
+        );
     }
 
     public StudentCreateDTO collectStudentData() {

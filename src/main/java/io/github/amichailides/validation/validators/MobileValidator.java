@@ -1,10 +1,15 @@
 package io.github.amichailides.validation.validators;
 
+import io.github.amichailides.validation.ValidationConstants;
+
+import java.util.Optional;
+
 public class MobileValidator {
-    public static boolean isValid(String input) {
-        if (input == null) return false;
+    public static Optional<String> isValid(String input) {
+        if (input != null && !input.isBlank() && input.matches(ValidationConstants.PHONE_REGEX)){
+            return Optional.of(input);
+        }
 
-
-        return input.matches("^69\\d{8}$");
+        return Optional.empty();
     }
 }

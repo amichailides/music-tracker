@@ -2,12 +2,18 @@ package io.github.amichailides.validation.validators;
 
 import io.github.amichailides.validation.ValidationConstants;
 
+import java.util.Optional;
+
 public class EmailValidator {
     private EmailValidator () {};
 
-    public static boolean isValid(String email) {
-        return email != null
+    public static Optional<String> isValid(String email) {
+        if (email != null
                 && !email.isBlank()
-                && email.matches(ValidationConstants.EMAIL_REGEX);
+                && email.matches(ValidationConstants.EMAIL_REGEX)){
+            return Optional.of(email);
+        }
+
+        return Optional.empty();
     }
 }

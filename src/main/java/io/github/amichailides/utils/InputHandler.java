@@ -1,5 +1,6 @@
 package io.github.amichailides.utils;
 
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -13,43 +14,53 @@ public class InputHandler {
 
     public String readValidated (String prompt,
                                  Function<String, String> sanitizer,
-                                 Predicate<String> validator,
+                                 Function<String, Optional<String>> validator,
                                  String errorMessage) {
         while (true){
             System.out.print(prompt);
-            String rawInput = scanner.nextLine();
-            String sanitized = sanitizer.apply(rawInput);
+            String sanitized = sanitizer.apply(scanner.nextLine());
 
-            if (validator.test(sanitized)) {
-                return sanitized;
+            Optional<String> result = validator.apply(sanitized);
+
+            if (result.isPresent()) {
+                return result.get();
             }
             System.err.println(errorMessage);
         }
     }
 
+    //in case we'll need plain dumb readLong we'll play with method overloading readLong(Long long)
     public Long readLong(String prompt,
-                         Predicate<Long> validator,
-                         String errorMessage)  {
+                         Function<String, String> sanitizer,
+                         Function<String, Optional<Long>> validator,
+                         String errorMessage) {
         while (true) {
             System.out.print(prompt);
-            String input = scanner.nextLine(); // Διαβάζουμε ως String για ασφάλεια
-            try {
-                long value = Long.parseLong(input);
-                if (validator.test(value)){
-                    return value;
-                }
-                System.err.println(errorMessage);
-            } catch (NumberFormatException e) {
-                System.err.println("Σφαλμα: Παρακαλώ εισάγετε έναν έγκυρο αριθμό.");
+            String sanitized = sanitizer.apply(scanner.nextLine()); // Διαβάζουμε ως String για ασφάλεια
+
+            Optional<Long> result = validator.apply(sanitized);
+
+            if(result.isPresent()){
+                return result.get();
             }
+            System.err.println(errorMessage);
         }
     }
 
-    public String readString(String prompt){
-        while (true){
-            System.out.println(prompt);
-            String input = scanner.nextLine().trim();
+    public String readString(String prompt,
+                             Function<String, String> sanitizer,
+                             Function<String, Optional<String>> validator,
+                             String errorMessage) {
+        while (true) {
+            System.out.print(prompt);
+            String sanitized = sanitizer.apply(scanner.nextLine());
+            Optional<String> result = validator.apply(sanitized);
 
+            if (result.isPresent()){
+                return result.get();
+            }
+
+            System.err.println(errorMessage);
         }
     }
 

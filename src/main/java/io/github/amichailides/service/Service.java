@@ -52,8 +52,6 @@ public class Service {
         if (!deleted) {
             throw new NoSuchElementException("Ο μαθητής δεν βρέθηκε.");
         }
-
-
     }
 
     public Optional<StudentProfileDTO> getStudentProfile(Long studentId){

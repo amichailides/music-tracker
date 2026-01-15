@@ -1,5 +1,7 @@
 package io.github.amichailides.validation.sanitizers;
 
+import io.github.amichailides.validation.ValidationConstants;
+
 public class MobileSanitizer {
     private MobileSanitizer () {};
 
@@ -8,7 +10,7 @@ public class MobileSanitizer {
         // κραταω μονο αριθμους basically, σβηνω κανα + που βαζουν κατι τρελοι
         String cleaned = input.replaceAll("[^0-9]", "");
 
-        // αν καποιος τρελος εβαλε +30
+        // αν καποιος εβαλε +30
         if (cleaned.startsWith("30") && cleaned.length() == 12) {
             cleaned = cleaned.substring(2);
         }

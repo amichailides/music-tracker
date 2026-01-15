@@ -46,7 +46,6 @@ public class Main {
                     case 4 -> controller.displayStudentLessons();
                     case 5 -> controller.deleteStudent();
                     case 6 -> controller.updateStudent();
-                    case 7 -> controller.searchStudentByLastName();
                     case 0 -> isRunning = false;
                 }
 

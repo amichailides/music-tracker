@@ -2,16 +2,20 @@ package io.github.amichailides.validation.validators;
 
 import io.github.amichailides.model.SkillLevel;
 
+import java.util.Optional;
+
 public class LevelValidator {
     private LevelValidator(){};
 
-    public static boolean isValid(String input) {
+    public static Optional<String> isValid(String input) {
+        if ( input == null || input.isBlank()){
+            return Optional.empty();
+        }
         try {
             SkillLevel.valueOf(input);
-            return true;
+            return Optional.of(input);
         } catch (IllegalArgumentException e) {
-            return false;
+            return Optional.empty();
         }
-
     }
 }
