@@ -4,9 +4,11 @@ import io.github.amichailides.dto.StudentCreateDTO;
 import io.github.amichailides.model.SkillLevel;
 import io.github.amichailides.utils.InputHandler;
 import io.github.amichailides.validation.ValidationConstants;
-import io.github.amichailides.validation.common.StringSanitizer;
-import io.github.amichailides.validation.student.sanitizers.*;
-import io.github.amichailides.validation.student.validators.*;
+import io.github.amichailides.validation.common.EmailSanitizer;
+import io.github.amichailides.validation.common.EmailValidator;
+import io.github.amichailides.validation.common.MobileSanitizer;
+import io.github.amichailides.validation.common.MobileValidator;
+import io.github.amichailides.validation.student.*;
 
 
 public class StudentDataEntry {
@@ -25,55 +27,58 @@ public class StudentDataEntry {
                 ValidationConstants.INVALID_ID);
     }
 
+    public String readStudentFirstName() {
+        return inputHandler.readString("Πληκτρολογειστε το ονομα του μαθητη:",
+                NameSanitizer::clean,
+                NameValidator::isValid,
+                ValidationConstants.INVALID_FIRST_NAME
+        );
+    }
+
     public String readStudentLastname() {
-        return inputHandler.readString("Πληκτρολογειστε το επιθετο του μαθητη:",
+        return inputHandler.readString("Πληκτρολογειστε το επιθετο του μαθητη: ",
                 NameSanitizer::clean,
                 NameValidator::isValid,
                 ValidationConstants.INVALID_LAST_NAME
         );
     }
 
-    public StudentCreateDTO collectStudentData() {
-        String firstName = inputHandler.readValidated("Πληκτρολογηστε ονομα: ",
-                StringSanitizer::clean,
-                NameValidator::isValid,
-                ValidationConstants.INVALID_FIRST_NAME
-        );
-
-        String lastName = inputHandler.readValidated("Πληκτρολογηστε επιθετο: ",
-                StringSanitizer::clean,
-                NameValidator::isValid,
-                ValidationConstants.INVALID_LAST_NAME
-        );
-
-        String email = inputHandler.readValidated("Πληκτρολογηστε E-mail: ",
-                StringSanitizer::clean,
+    public String readStudentEmail() {
+        return inputHandler.readString("Πληκτρολογηστε E-mail: ",
+                EmailSanitizer::clean,
                 EmailValidator::isValid,
                 ValidationConstants.INVALID_EMAIL
                 // TODO: Να υλοποιηθεί μηχανισμός για συγκεκριμένα μηνύματα σφάλματος
-                // (π.χ. "Λείπει το @", "Περιέχει κενά", κτλ) ανάλογα με την αποτυχία του Validator.
+                // (π.χ. "Λειπει το @", "Εχει κενα", κτλ.. αναλογα με την αποτυχια του Validator.
         );
+    }
 
-        String mobile = inputHandler.readValidated("Πληκτρολογηστε αριθμο κινητου [+30]: ",
+    public String readStudentMobile() {
+        return inputHandler.readString("Πληκτρολογηστε αριθμο κινητου [+30]: ",
                 MobileSanitizer::clean,
                 MobileValidator::isValid,
                 ValidationConstants.INVALID_PHONE
         );
+    }
 
-        String level = inputHandler.readValidated("Πληκτρολογηστε επιπεδο [BEGINNER | INTERMEDIATE | ADVANCED]: ",
+    public String readStudentLevel() {
+        return inputHandler.readString("Πληκτρολογηστε επιπεδο [BEGINNER | INTERMEDIATE | ADVANCED]: ",
                 LevelSanitizer::clean,
                 LevelValidator::isValid,
                 ValidationConstants.INVALID_LEVEL
         );
+    }
 
 
+
+    public StudentCreateDTO collectStudentData() {
 
         return StudentCreateDTO.builder()
-                .firstName(firstName)
-                .lastName(lastName)
-                .email(email)
-                .mobile(mobile)
-                .level(SkillLevel.valueOf(level))
+                .firstName(readStudentFirstName())
+                .lastName(readStudentLastname())
+                .email(readStudentEmail())
+                .mobile(readStudentMobile())
+                .level(SkillLevel.valueOf(readStudentLevel()))
                 .build();
 
     }

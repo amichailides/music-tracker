@@ -1,4 +1,4 @@
-package io.github.amichailides.validation.student.validators;
+package io.github.amichailides.validation.student;
 
 import io.github.amichailides.model.SkillLevel;
 

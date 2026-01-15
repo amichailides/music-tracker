@@ -1,4 +1,4 @@
-package io.github.amichailides.validation.student.validators;
+package io.github.amichailides.validation.common;
 
 import io.github.amichailides.validation.ValidationConstants;
 

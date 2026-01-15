@@ -1,4 +1,4 @@
-package io.github.amichailides.validation.student.sanitizers;
+package io.github.amichailides.validation.common;
 
 public class MobileSanitizer {
     private MobileSanitizer () {};

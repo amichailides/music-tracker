@@ -1,4 +1,4 @@
-package io.github.amichailides.validation.student.sanitizers;
+package io.github.amichailides.validation.student;
 
 public class LevelSanitizer {
     private LevelSanitizer(){};
