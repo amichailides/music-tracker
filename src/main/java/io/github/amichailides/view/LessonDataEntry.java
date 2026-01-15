@@ -2,7 +2,7 @@ package io.github.amichailides.view;
 
 import io.github.amichailides.dto.LessonCreateDTO;
 import io.github.amichailides.utils.InputHandler;
-import io.github.amichailides.validation.sanitizers.StringSanitizer;
+import io.github.amichailides.validation.common.StringSanitizer;
 import java.time.LocalDate;
 import java.util.Optional;
 

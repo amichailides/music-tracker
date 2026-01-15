@@ -4,8 +4,9 @@ import io.github.amichailides.dto.StudentCreateDTO;
 import io.github.amichailides.model.SkillLevel;
 import io.github.amichailides.utils.InputHandler;
 import io.github.amichailides.validation.ValidationConstants;
-import io.github.amichailides.validation.sanitizers.*;
-import io.github.amichailides.validation.validators.*;
+import io.github.amichailides.validation.common.StringSanitizer;
+import io.github.amichailides.validation.student.sanitizers.*;
+import io.github.amichailides.validation.student.validators.*;
 
 
 public class StudentDataEntry {

@@ -1,4 +1,4 @@
-package io.github.amichailides.validation.sanitizers;
+package io.github.amichailides.validation.common;
 
 public class StringSanitizer {
     private StringSanitizer(){};

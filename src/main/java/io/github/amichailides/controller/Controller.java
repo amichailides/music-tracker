@@ -7,12 +7,12 @@ import io.github.amichailides.dto.StudentUpdateDTO;
 import io.github.amichailides.model.Student;
 import io.github.amichailides.service.Service;
 import io.github.amichailides.utils.InputHandler;
-import io.github.amichailides.validation.sanitizers.LevelSanitizer;
-import io.github.amichailides.validation.sanitizers.StringSanitizer;
-import io.github.amichailides.validation.validators.EmailValidator;
-import io.github.amichailides.validation.validators.LevelValidator;
-import io.github.amichailides.validation.validators.MobileValidator;
-import io.github.amichailides.validation.validators.NameValidator;
+import io.github.amichailides.validation.student.sanitizers.LevelSanitizer;
+import io.github.amichailides.validation.common.StringSanitizer;
+import io.github.amichailides.validation.student.validators.EmailValidator;
+import io.github.amichailides.validation.student.validators.LevelValidator;
+import io.github.amichailides.validation.student.validators.MobileValidator;
+import io.github.amichailides.validation.student.validators.NameValidator;
 import io.github.amichailides.view.LessonDataEntry;
 import io.github.amichailides.view.StudentDataEntry;
 import io.github.amichailides.view.StudentPrinter;
@@ -20,7 +20,6 @@ import io.github.amichailides.view.StudentPrinter;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class Controller {
     private final Service service;

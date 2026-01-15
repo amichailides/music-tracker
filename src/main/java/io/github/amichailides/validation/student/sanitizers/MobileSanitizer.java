@@ -1,6 +1,4 @@
-package io.github.amichailides.validation.sanitizers;
-
-import io.github.amichailides.validation.ValidationConstants;
+package io.github.amichailides.validation.student.sanitizers;
 
 public class MobileSanitizer {
     private MobileSanitizer () {};
