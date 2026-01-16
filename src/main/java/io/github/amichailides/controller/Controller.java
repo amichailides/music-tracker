@@ -13,13 +13,15 @@ import io.github.amichailides.validation.student.NameValidator;
 import io.github.amichailides.view.LessonDataEntry;
 import io.github.amichailides.view.StudentDataEntry;
 import io.github.amichailides.view.StudentPrinter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Function;
 
+@Builder
+@AllArgsConstructor
 public class Controller {
     private final Service service;
     private final InputHandler inputHandler;
@@ -27,14 +29,6 @@ public class Controller {
     private final LessonDataEntry lessonEntry;
     private final StudentDataEntry studentEntry;
 
-
-    public Controller(Service service, InputHandler inputHandler, StudentPrinter printer, LessonDataEntry lessonEntry, StudentDataEntry studentEntry) {
-        this.service = service;
-        this.inputHandler = inputHandler;
-        this.printer = printer;
-        this.lessonEntry = lessonEntry;
-        this.studentEntry = studentEntry;
-    }
 
     public void registerStudent () {
         StudentCreateDTO studentDTO = studentEntry.collectStudentData();

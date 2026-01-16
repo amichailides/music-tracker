@@ -13,28 +13,12 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        // Στην αρχή της public static void main
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(java.util.logging.Level.SEVERE);
-        //IStudentRepository repository = new InMemoryRepository();
-        //StudentRepository studentRepo = new SqlStudentRepository();
-        StudentRepository studentRepo = new JpaStudentRepository();
-        LessonRepository lessonRepo = new SqlLessonRepository();
-        Service service = new Service(studentRepo, lessonRepo);
-        StudentPrinter printer = new StudentPrinter();
         Scanner scanner = new Scanner(System.in);
-        InputHandler inputHandler = new InputHandler(scanner);
-        StudentDataEntry studentEntry = new StudentDataEntry(inputHandler);
-        LessonDataEntry lessonEntry = new LessonDataEntry(inputHandler);
 
-        Controller controller = new Controller(
-                service,
-                inputHandler,
-                printer,
-                lessonEntry,
-                studentEntry);
+        Controller controller = AppFactory.createController(scanner);
 
         boolean isRunning = true;
-
         do {
             try {
                 printMenu();
