@@ -1,9 +1,6 @@
 package io.github.amichailides.controller;
 
-import io.github.amichailides.dto.LessonCreateDTO;
-import io.github.amichailides.dto.StudentCreateDTO;
-import io.github.amichailides.dto.StudentListDTO;
-import io.github.amichailides.dto.StudentUpdateDTO;
+import io.github.amichailides.dto.*;
 import io.github.amichailides.model.Student;
 import io.github.amichailides.service.Service;
 import io.github.amichailides.utils.InputHandler;
@@ -17,6 +14,8 @@ import io.github.amichailides.view.LessonDataEntry;
 import io.github.amichailides.view.StudentDataEntry;
 import io.github.amichailides.view.StudentPrinter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Function;
@@ -46,7 +45,7 @@ public class Controller {
 
     public void displayAllStudents () {
         StudentListDTO allStudents = service.prepareStudentsForPrint();
-        printer.printAllStudents(allStudents);
+        printer.printStudentTable(allStudents.getStudents(), "Ολοι μαθητες");
     }
 
     public void addLessonToStudent () {
@@ -138,6 +137,12 @@ public class Controller {
                 "Λάθος μορφή! Ξαναπροσπάθησε ή πάτα Enter για παράκαμψη."
         );
         return input.isBlank() ? currentValue : input;
+    }
+
+    public void displayMatchingStudents(){
+        String rawLastName = studentEntry.readStudentLastname();
+        StudentListDTO students = service.findStudentsByLastName(rawLastName);
+        printer.printStudentTable(students.getStudents(), "Αναζητηση: " + rawLastName);
     }
 
 }

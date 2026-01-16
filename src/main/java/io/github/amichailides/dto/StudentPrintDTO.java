@@ -3,7 +3,6 @@ package io.github.amichailides.dto;
 import io.github.amichailides.model.SkillLevel;
 import io.github.amichailides.model.Student;
 import lombok.Builder;
-import lombok.NoArgsConstructor;
 import lombok.Value;
 
 @Value

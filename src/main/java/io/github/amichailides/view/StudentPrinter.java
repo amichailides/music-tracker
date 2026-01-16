@@ -7,10 +7,10 @@ import java.util.List;
 
 
 public class StudentPrinter {
-
-    public void printAllStudents(StudentListDTO dto) {
+    /*
+    public void printAllStudents(StudentListDTO dto, String header) {
         if (dto == null || dto.getStudents() == null || dto.getStudents().isEmpty()) {
-            System.out.println("Δεν βρέθηκαν μαθητές για εκτύπωση.");
+            System.out.println("Δεν βρεθηκαν μαθητες για εκτυπωση.");
             return;
         }
         System.out.println("----------------------------------------------------------------------------");
@@ -27,7 +27,9 @@ public class StudentPrinter {
         System.out.println("----------------------------------------------------------------------------");
     }
 
-    public void printFullProfile (StudentProfileDTO profile){
+     */
+
+    public void printFullProfile(StudentProfileDTO profile) {
         StudentPrintDTO student = profile.getStudentDetails();
         List<LessonPrintDTO> lessons = profile.getLessons();
 
@@ -48,7 +50,7 @@ public class StudentPrinter {
             System.out.printf(" %-15s | %-35s | %-35s%n", "ΗΜΕΡΟΜΗΝΙΑ", "HOMEWORK / ΑΣΚΗΣΕΙΣ", "ΣΧΟΛΙΑ ΔΑΣΚΑΛΟΥ");
             System.out.println(" " + "-".repeat(92));
             lessons.forEach(l -> {
-                System.out.printf(" %-15s | %-35s | %-35s%n",
+                        System.out.printf(" %-15s | %-35s | %-35s%n",
                                 l.getDate(), l.getHomework(), l.getComments());
                     }
             );
@@ -56,4 +58,28 @@ public class StudentPrinter {
         }
     }
 
+    public void printStudentTable(List<StudentPrintDTO> students, String header) {
+        // Χρησιμοποιούμε το header που στέλνει ο Controller
+        System.out.println("\n=== " + header.toUpperCase() + " ===");
+
+        if (students == null || students.isEmpty()) {
+            System.out.println("Δεν βρέθηκαν μαθητές για εκτύπωση.");
+            return;
+        }
+
+        System.out.println("----------------------------------------------------------------------------");
+        System.out.printf("%-5s | %-25s | %-25s | %-10s%n", "ID", "ΟΝΟΜΑΤΕΠΩΝΥΜΟ", "EMAIL", "LEVEL");
+        System.out.println("----------------------------------------------------------------------------");
+
+        for (StudentPrintDTO s : students) {
+            System.out.printf("%-5s | %-25s | %-25s | %-10s%n",
+                    s.getId(),
+                    s.getName(), // Εδώ χρησιμοποιείς το getter σου
+                    s.getEmail(),
+                    s.getLevel());
+        }
+        System.out.println("----------------------------------------------------------------------------");
+    }
+
 }
+

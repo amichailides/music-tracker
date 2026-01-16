@@ -18,7 +18,7 @@ public class StudentDataEntry {
         this.inputHandler = inputHandler;
     }
 
-    public  Long readStudentId() {
+    public Long readStudentId() {
        // return inputHandler.readLong("Πληκτρολογειστε το ID του μαθητη: ");
         return inputHandler.readLong(
                 "Πληκτρολογειστε το ID του μαθητη: ",
@@ -68,7 +68,6 @@ public class StudentDataEntry {
                 ValidationConstants.INVALID_LEVEL
         );
     }
-
 
 
     public StudentCreateDTO collectStudentData() {

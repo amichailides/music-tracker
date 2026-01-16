@@ -79,12 +79,23 @@ public class JpaStudentRepository implements StudentRepository{
         }
     }
 
+    /**
+     * Αναζητηση μαθητων με βαση το επιθετο (Partial Match).
+     * Χρησιμοποιουμε:
+     * 1. LIKE με το συμβολο '%' στο τελος για αναζητηση που "ξεκιναει απο" (Starts With).
+     * 2. UPPER() και στα δυο μερη, γιατι η PostgreSQL ειναι Case-Sensitive
+     * (διαφορετικο το 'Παπαδ' απο το 'παπαδ').
+     *
+     * @param lastName Το επιθετο η μερος αυτου που πληκτρολογησε ο χρηστης.
+     * @return Λιστα μαθητων που το επιθετο τους ταιριαζει με το κριτηριο.
+     */
     @Override
     public List<Student> findByLastName(String lastName) {
         try (EntityManager em = JpaUtil.getEntityManager()){
 
-            return em.createQuery("SELECT s FROM Student s WHERE s.lastName = :lastName", Student.class)
-                    .setParameter("lastName", lastName )
+            return em.createQuery(
+                    "SELECT s FROM Student s WHERE UPPER(s.lastName) LIKE UPPER(:lastName)", Student.class)
+                    .setParameter("lastName", lastName + "%" )
                     .getResultList();
         }
     }

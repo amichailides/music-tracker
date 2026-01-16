@@ -108,4 +108,15 @@ public class Service {
         return updatedStudent.getId();
 
     }
+
+    public StudentListDTO findStudentsByLastName(String lastName){
+
+        List<Student> matchingStudents = studentRepo.findByLastName(lastName);
+
+        List<StudentPrintDTO> printDTOS =  matchingStudents.stream()
+                .map(StudentPrintDTO::from)
+                .toList();
+
+        return new StudentListDTO(printDTOS);
+    }
 }
