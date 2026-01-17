@@ -46,7 +46,7 @@ public class Controller {
         Long studentId = studentEntry.readStudentId();
         LessonCreateDTO lessonDTO = lessonEntry.collectLessonData();
         service.addLesson(studentId, lessonDTO);
-        System.out.println("Η εγγραφη του μαθηματος ολοκληρωθηκε με επιτυχια");
+        printer.printSuccess("Η εγγραφη του μαθηματος ολοκληρωθηκε με επιτυχια");
 
     }
 
@@ -55,10 +55,10 @@ public class Controller {
             Long studentId = studentEntry.readStudentId();
             service.getStudentProfile(studentId).ifPresentOrElse(
                     profile -> printer.printFullProfile(profile),
-                    () -> System.out.printf("Σφαλμα: ο μαθητης με id: %d δεν βρεθηκε.%n", studentId)
+                    () -> printer.printError("Ο μαθητης με id: " + studentId + " δεν βρεθηκε.")
             );
         } catch (NumberFormatException e) {
-            System.out.println("Ακυρο id. Παρακαλω προσπαθειστε ξανα.");
+            printer.printError("Ακυρο ID. Παρακαλω εισαγετε μονο αριθμους.");
         }
     }
 
@@ -66,11 +66,11 @@ public class Controller {
         try {
             Long studentId = studentEntry.readStudentId();
             service.deleteStudent(studentId);
-            System.out.println("Επιτυχια: Ο μαθητης με ID " + studentId + " διαγράφηκε οριστικά.");
+            printer.printSuccess("Ο μαθητης με ID " + studentId + " διαγραφηκε οριστικα.");
         } catch (NoSuchElementException | IllegalArgumentException e) {
-            System.out.println("Σφαλμα: " + e.getMessage());
+            printer.printError(e.getMessage());
         } catch (Exception e) {
-            System.out.println("Απροσμενο σφαλμα: " + e.getMessage());
+            printer.printError("Απροσμενο σφαλμα: " + e.getMessage());
         }
     }
 
@@ -79,7 +79,7 @@ public class Controller {
             Long studentId = studentEntry.readStudentId();
             StudentUpdateDTO currentData = service.getStudentForUpdate(studentId);
 
-            System.out.println("--- Ενημέρωση Στοιχείων ---");
+            printer.printUpdateHeader();
 
             String newFirstName = readOptional("Όνομα", currentData.getFirstName(), StringSanitizer::clean, NameValidator::isValid);
             String newLastName = readOptional("Επώνυμο", currentData.getLastName(), StringSanitizer::clean, NameValidator::isValid);
@@ -101,7 +101,7 @@ public class Controller {
 
             studentId = service.updateStudent(studentId, changedDTO);
 
-            System.out.printf("Ο μαθητης με id: %d ενημερωθηκε επιτυχως%n", studentId);
+            printer.printSuccess("Ο μαθητης με id: %d ενημερωθηκε επιτυχως" + studentId);
 
         } catch (RuntimeException e) {
             System.out.println("Σφαλμα: " + e.getMessage());

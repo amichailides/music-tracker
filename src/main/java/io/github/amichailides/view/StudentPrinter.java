@@ -7,27 +7,6 @@ import java.util.List;
 
 
 public class StudentPrinter {
-    /*
-    public void printAllStudents(StudentListDTO dto, String header) {
-        if (dto == null || dto.getStudents() == null || dto.getStudents().isEmpty()) {
-            System.out.println("Δεν βρεθηκαν μαθητες για εκτυπωση.");
-            return;
-        }
-        System.out.println("----------------------------------------------------------------------------");
-        System.out.printf("%-5s | %-25s | %-25s | %-10s%n", "ID", "ΟΝΟΜΑΤΕΠΩΝΥΜΟ", "EMAIL", "LEVEL");
-        System.out.println("----------------------------------------------------------------------------");
-
-        for (StudentPrintDTO s : dto.getStudents()) {
-            System.out.printf("%-5s | %-25s | %-25s | %-10s%n",
-                    s.getId(),
-                    s.getName(),
-                    s.getEmail(),
-                    s.getLevel());
-        }
-        System.out.println("----------------------------------------------------------------------------");
-    }
-
-     */
 
     public void printFullProfile(StudentProfileDTO profile) {
         StudentPrintDTO student = profile.getStudentDetails();
@@ -59,7 +38,7 @@ public class StudentPrinter {
     }
 
     public void printStudentTable(List<StudentPrintDTO> students, String header) {
-        // Χρησιμοποιούμε το header που στέλνει ο Controller
+
         System.out.println("\n=== " + header.toUpperCase() + " ===");
 
         if (students == null || students.isEmpty()) {
@@ -74,12 +53,29 @@ public class StudentPrinter {
         for (StudentPrintDTO s : students) {
             System.out.printf("%-5s | %-25s | %-25s | %-10s%n",
                     s.getId(),
-                    s.getName(), // Εδώ χρησιμοποιείς το getter σου
+                    s.getName(), // first + last name combined απο το DTO
                     s.getEmail(),
                     s.getLevel());
         }
         System.out.println("----------------------------------------------------------------------------");
     }
 
+    public void printSuccess(String message) {
+        System.out.println("\n ΕΠΙΤΥΧΙΑ: " + message);
+    }
+
+    public void printError(String message) {
+        System.out.println("\n ΣΦΑΛΜΑ: " + message);
+    }
+
+    public void printUpdateHeader() {
+        System.out.println("\n==========================================");
+        System.out.println("       ΕΝΗΜΕΡΩΣΗ ΣΤΟΙΧΕΙΩΝ ΜΑΘΗΤΗ");
+        System.out.println("==========================================");
+        System.out.println("   Οδηγια: Πατηστε [ENTER] σε οποιοδηποτε");
+        System.out.println("   πεδιο για να διατηρησετε την υπρχουσα");
+        System.out.println("   τιμη χωρις αλλαγη.");
+        System.out.println("------------------------------------------");
+    }
 }
 
