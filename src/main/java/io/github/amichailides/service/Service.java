@@ -29,9 +29,11 @@ public class Service {
 
         Student student = studentRepo.findById(studentId)
                 .orElseThrow(() -> new RuntimeException("Student not found with id: " + studentId));
-        Lesson lesson = Lesson.createFromDTO(dto);
 
-        return lessonRepo.save(lesson, student.getId());
+        Lesson lesson = Lesson.createFromDTO(dto);
+        lesson.setStudent(student);
+
+        return lessonRepo.save(lesson);
     }
 
     public StudentListDTO prepareStudentsForPrint() {

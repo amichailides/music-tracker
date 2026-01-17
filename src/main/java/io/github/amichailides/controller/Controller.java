@@ -44,6 +44,7 @@ public class Controller {
 
     public void addLessonToStudent () {
         Long studentId = studentEntry.readStudentId();
+
         LessonCreateDTO lessonDTO = lessonEntry.collectLessonData();
         service.addLesson(studentId, lessonDTO);
         printer.printSuccess("Η εγγραφη του μαθηματος ολοκληρωθηκε με επιτυχια");
@@ -104,7 +105,7 @@ public class Controller {
             printer.printSuccess("Ο μαθητης με id: %d ενημερωθηκε επιτυχως" + studentId);
 
         } catch (RuntimeException e) {
-            System.out.println("Σφαλμα: " + e.getMessage());
+            printer.printError(e.getMessage());
         }
     }
 
@@ -137,6 +138,11 @@ public class Controller {
         String rawLastName = studentEntry.readStudentLastname();
         StudentListDTO students = service.findStudentsByLastName(rawLastName);
         printer.printStudentTable(students.getStudents(), "Αναζητηση: " + rawLastName);
+    }
+
+    public void createLesson(){
+        LessonCreateDTO lessonDTO = lessonEntry.collectLessonData();
+
     }
 
 }

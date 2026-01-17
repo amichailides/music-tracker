@@ -15,27 +15,27 @@ public class SqlLessonRepository implements LessonRepository {
     private final String user = "postgres";
     private final String password = System.getenv("DB_PASSWORD");
 
-    public Lesson save (Lesson lesson, Long studentId) {
-        String query = "INSERT INTO lessons (lesson_date, lesson_comments, homework, student_id)" +
-                "VALUES (?, ?, ?, ?)";
+
+    public Lesson save(Lesson lesson) {
+        String query = "INSERT INTO lessons (lesson_date, lesson_comments, homework, student_id) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(url, user, password);
-             PreparedStatement pstm = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
+             PreparedStatement pstm = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             pstm.setObject(1, lesson.getDate());
             pstm.setString(2, lesson.getComments());
             pstm.setString(3, lesson.getHomework());
-            pstm.setLong(4, studentId);
+            pstm.setLong(4, lesson.getStudent().getId());
 
             pstm.executeUpdate();
 
-            try (ResultSet generatedKeys = pstm.getGeneratedKeys()){
+            try (ResultSet generatedKeys = pstm.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     lesson.setId(generatedKeys.getLong(1));
                 }
             }
-        }catch (SQLException e) {
-            throw new RuntimeException("Σφαλμα αποθηκευσης μαθηματος" + e.getMessage(), e);
+        } catch (SQLException e) {
+            throw new RuntimeException("Σφάλμα αποθήκευσης μαθήματος: " + e.getMessage(), e);
         }
         return lesson;
     }

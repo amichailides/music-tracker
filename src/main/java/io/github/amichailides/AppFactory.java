@@ -3,10 +3,7 @@ package io.github.amichailides;
 //  IStudentRepository repository = new InMemoryRepository();
 //  StudentRepository studentRepo = new SqlStudentRepository();
 import io.github.amichailides.controller.Controller;
-import io.github.amichailides.repository.JpaStudentRepository;
-import io.github.amichailides.repository.LessonRepository;
-import io.github.amichailides.repository.SqlLessonRepository;
-import io.github.amichailides.repository.StudentRepository;
+import io.github.amichailides.repository.*;
 import io.github.amichailides.service.Service;
 import io.github.amichailides.utils.InputHandler;
 import io.github.amichailides.view.LessonDataEntry;
@@ -20,7 +17,7 @@ public class AppFactory {
     public static Controller createController(Scanner scanner) {
 
         StudentRepository studentRepo = new JpaStudentRepository();
-        LessonRepository lessonRepo = new SqlLessonRepository();
+        LessonRepository lessonRepo = new JpaLessonRepository();
 
         Service service = new Service(studentRepo, lessonRepo);
 

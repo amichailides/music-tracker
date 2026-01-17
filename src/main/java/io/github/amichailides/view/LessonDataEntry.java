@@ -3,6 +3,7 @@ package io.github.amichailides.view;
 import io.github.amichailides.dto.LessonCreateDTO;
 import io.github.amichailides.utils.InputHandler;
 import io.github.amichailides.validation.common.StringSanitizer;
+
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -14,31 +15,38 @@ public class LessonDataEntry {
         this.inputHandler = inputHandler;
     }
 
-     public LessonCreateDTO collectLessonData() {
-         LocalDate date = LocalDate.now();
+    public String readLessonComments() {
+        return inputHandler.readValidated(
+                "Σχολια μαθηματος [Enter για skip]: ",
+                StringSanitizer::clean,
+                homeworkText -> Optional.of(homeworkText),
+                ""
+        );
+    }
 
-         String rawComments = inputHandler.readValidated(
-                 "Σχολια μαθηματος [Enter για skip]: ",
-                 StringSanitizer::clean,
-                 commentsText -> Optional.of(commentsText), // Δεν χρειαζομαι validation στα comments
-                 "" // ουτε error message, θα περασει αερα !
-         );
+    public String readLessonHomework() {
+        return inputHandler.readValidated(
+                "Εργασια για το σπιτι [Enter για skip]: ",
+                StringSanitizer::clean,
+                homeworkText -> Optional.of(homeworkText),
+                ""
+        );
+    }
 
-         String comments = rawComments.isEmpty() ? "-" : rawComments;
+    public LocalDate readLessonDate() {
+        return LocalDate.now();
+    }
 
-         String rawHomework = inputHandler.readValidated(
-                 "Εργασία για το σπίτι [Enter για skip]: ",
-                 StringSanitizer::clean,
-                 homeworkText -> Optional.of(homeworkText),
-                 ""
-         );
+    public LessonCreateDTO collectLessonData() {
 
-         String homework = rawHomework.isEmpty() ? "-" : rawHomework;
+        return LessonCreateDTO.builder()
+                .date(readLessonDate())
+                .comments(defaultIfEmpty(readLessonComments()))
+                .homework(defaultIfEmpty(readLessonHomework()))
+                .build();
+    }
 
-         return LessonCreateDTO.builder()
-                 .date(date)
-                 .comments(comments)
-                 .homework(homework)
-                 .build();
-     }
+    private String defaultIfEmpty(String value) {
+        return value.isEmpty() ? "-" : value;
+    }
 }

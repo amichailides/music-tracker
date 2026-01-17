@@ -5,7 +5,7 @@ import io.github.amichailides.model.Lesson;
 import java.util.List;
 
 public interface LessonRepository {
-    Lesson save(Lesson lesson, Long id);
+    Lesson save(Lesson lesson);
     List<Lesson> findByStudentId(Long studentId);
     void deleteById (Long studentId);
 }
