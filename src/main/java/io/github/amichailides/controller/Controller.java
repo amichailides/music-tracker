@@ -65,9 +65,11 @@ public class Controller {
 
     public void deleteStudent () {
         try {
+
             Long studentId = studentEntry.readStudentId();
             service.deleteStudent(studentId);
-            printer.printSuccess("Ο μαθητης με ID " + studentId + " διαγραφηκε οριστικα.");
+            printer.printSuccess("Ο μαθητης με ID " + studentId + " διαγραφηκε.");
+
         } catch (NoSuchElementException | IllegalArgumentException e) {
             printer.printError(e.getMessage());
         } catch (Exception e) {
@@ -140,9 +142,14 @@ public class Controller {
         printer.printStudentTable(students.getStudents(), "Αναζητηση: " + rawLastName);
     }
 
-    public void createLesson(){
-        LessonCreateDTO lessonDTO = lessonEntry.collectLessonData();
-
+    public void deleteLesson() {
+        try {
+            Long lessonId = lessonEntry.readLessonId();
+            service.deleteLesson(lessonId);
+            printer.printSuccess("Το μαθημα με ID " + lessonId + "διαγραφηκε.");
+        } catch (RuntimeException e) {
+            printer.printError("Σφαλμα: " + e.getMessage());
+        }
     }
 
 }

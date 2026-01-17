@@ -31,6 +31,7 @@ public class Main {
                     case 5 -> controller.deleteStudent();
                     case 6 -> controller.updateStudent();
                     case 7 -> controller.displayMatchingStudents();
+                    case 8 -> controller.deleteLesson();
                     case 0 -> isRunning = false;
                 }
 
@@ -51,6 +52,7 @@ public class Main {
         System.out.println("5. Διαγραφη Μαθητη");
         System.out.println("6. Ενημερωση στοιχειων μαθητη (Update)");
         System.out.println("7. Αναζήτηση μαθητή με επώνυμο");
+        System.out.println("8. Διαγραφη μαθηματος");
         System.out.println("0. Έξοδος");
         System.out.print("Επιλέξτε ενέργεια: ");
     }

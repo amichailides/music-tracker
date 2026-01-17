@@ -48,7 +48,7 @@ public class StudentDataEntry {
                 EmailSanitizer::clean,
                 EmailValidator::isValid,
                 ValidationConstants.INVALID_EMAIL
-                // TODO: Να υλοποιηθεί μηχανισμός για συγκεκριμένα μηνύματα σφάλματος
+                // TODO: Να το αλλαξω για συγκεκριμενα error μηνυματα
                 // (π.χ. "Λειπει το @", "Εχει κενα", κτλ.. αναλογα με την αποτυχια του Validator.
         );
     }

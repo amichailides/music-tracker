@@ -3,6 +3,8 @@ package io.github.amichailides.repository;
 import io.github.amichailides.model.Student;
 import io.github.amichailides.utils.JpaUtil;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceException;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +44,9 @@ public class JpaStudentRepository implements StudentRepository{
         try (EntityManager em = JpaUtil.getEntityManager()){
             Student student = em.find(Student.class, studentId);
             return Optional.ofNullable(student);  // no NullPointException return
+        } catch (PersistenceException e){
+            System.err.println("Σφαλμα: " + e.getMessage());
+            throw new RuntimeException("Σφαλμα κατα την αναζητηση στην Βαση Δεδομενων" , e);
         }
     }
 

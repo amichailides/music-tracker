@@ -7,5 +7,5 @@ import java.util.List;
 public interface LessonRepository {
     Lesson save(Lesson lesson);
     List<Lesson> findByStudentId(Long studentId);
-    void deleteById (Long studentId);
+    boolean deleteById (Long studentId);
 }

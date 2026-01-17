@@ -122,4 +122,11 @@ public class Service {
         return new StudentListDTO(printDTOS);
     }
 
+    public void deleteLesson(Long lessonId) {
+        boolean isDeleted = lessonRepo.deleteById(lessonId);
+        if (!isDeleted) {
+            throw new RuntimeException("Το μαθημα με ID " + lessonId + "δεν βρεθηκε");
+        }
+    }
+
 }

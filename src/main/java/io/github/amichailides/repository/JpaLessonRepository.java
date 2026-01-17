@@ -26,13 +26,44 @@ public class JpaLessonRepository implements LessonRepository{
     }
 
     public List<Lesson> findByStudentId(Long studentId){
-        //TODO
-        return null;
+        try (EntityManager em = JpaUtil.getEntityManager()){
+            return em.createQuery(
+                    "SELECT l FROM Lesson l WHERE l.student.id = :studentId ORDER BY l.date DESC", Lesson.class)
+                    .setParameter("studentId", studentId)
+                    .getResultList();
+        }
     }
 
-    public void deleteById (Long studentId) {
-        //TODO
+    public boolean existsById(Long lessonId) {
+        try (EntityManager em = JpaUtil.getEntityManager()){
+            //  l.id = indexed , instant pull . δεν τρεχει ολη την βαση
+            return em.createQuery("SELECT COUNT(l) FROM Lesson l WHERE l.id = :id", Long.class)
+                    .setParameter("id", lessonId )
+                    .getSingleResult() > 0;
+        }
+    }
 
+    public boolean deleteById (Long lessonId) {
+        try (EntityManager em = JpaUtil.getEntityManager()){
+            try {
+                em.getTransaction().begin();
+                Lesson lesson = em.find(Lesson.class, lessonId);
+
+                if (lesson != null){
+                    em.remove(lesson);
+                    em.getTransaction().commit();
+                    return true;
+                }
+                //in case lesson == null -> rollback
+                em.getTransaction().rollback();
+            } catch (Exception e) {
+                if (em.getTransaction().isActive()) {
+                    em.getTransaction().rollback();
+                }
+                throw new RuntimeException("Σφαλμα κατα την διαγραφη μαθηματος ->" + e.getMessage() );
+            }
+        }
+        return false;
     }
 
 }
