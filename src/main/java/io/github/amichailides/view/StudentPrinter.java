@@ -26,11 +26,11 @@ public class StudentPrinter {
             System.out.println(" [!] Δεν βρέθηκε ιστορικό μαθημάτων για τον συγκεκριμένο μαθητή.");
         } else {
             System.out.println(" ΙΣΤΟΡΙΚΟ ΜΑΘΗΜΑΤΩΝ:");
-            System.out.printf(" %-15s | %-35s | %-35s%n", "ΗΜΕΡΟΜΗΝΙΑ", "HOMEWORK / ΑΣΚΗΣΕΙΣ", "ΣΧΟΛΙΑ ΔΑΣΚΑΛΟΥ");
+            System.out.printf(" %-2s | %-15s | %-35s | %-35s%n","ID", "ΗΜΕΡΟΜΗΝΙΑ", "HOMEWORK / ΑΣΚΗΣΕΙΣ", "ΣΧΟΛΙΑ ΔΑΣΚΑΛΟΥ");
             System.out.println(" " + "-".repeat(92));
             lessons.forEach(l -> {
-                        System.out.printf(" %-15s | %-35s | %-35s%n",
-                                l.getDate(), l.getHomework(), l.getComments());
+                        System.out.printf(" %-2s | %-15s | %-35s | %-35s%n",
+                                l.getId(), l.getDate(), l.getHomework(), l.getComments());
                     }
             );
 
@@ -77,5 +77,26 @@ public class StudentPrinter {
         System.out.println("   τιμη χωρις αλλαγη.");
         System.out.println("------------------------------------------");
     }
+
+    public void printPostDisplayActions() {
+        System.out.println("\n====================");
+        System.out.println("1. Update Student");
+        System.out.println("2. Update Lesson");
+        System.out.println("0. Back to main menu");
+        System.out.println("====================");
+
+    }
+
+    public void clearScreen() {
+        try {
+            // Δημιουργούμε μια διεργασία που εκτελεί την εντολή 'cls' των Windows
+            // Το .inheritIO() συνδέει την έξοδο της εντολής με την κονσόλα της Java
+            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+        } catch (Exception e) {
+            // Εδώ δεν κάνουμε τίποτα - αν το σύστημα δεν υποστηρίζει cls,
+            // απλά συνεχίζουμε χωρίς να "βρωμίζουμε" την οθόνη.
+        }
+    }
+
 }
 

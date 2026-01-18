@@ -4,10 +4,7 @@ import io.github.amichailides.dto.StudentCreateDTO;
 import io.github.amichailides.model.SkillLevel;
 import io.github.amichailides.utils.InputHandler;
 import io.github.amichailides.validation.ValidationConstants;
-import io.github.amichailides.validation.common.EmailSanitizer;
-import io.github.amichailides.validation.common.EmailValidator;
-import io.github.amichailides.validation.common.MobileSanitizer;
-import io.github.amichailides.validation.common.MobileValidator;
+import io.github.amichailides.validation.common.*;
 import io.github.amichailides.validation.student.*;
 
 
@@ -67,6 +64,14 @@ public class StudentDataEntry {
                 LevelValidator::isValid,
                 ValidationConstants.INVALID_LEVEL
         );
+    }
+
+    public int readLessonUpdateChoice() {
+        return inputHandler.readInt("Επιλεξτε ενεργεια: ",
+        IntegerSanitizer::clean,
+                IntegerValidator.isBetween(0,2),
+                "λαθος επιλογη, πατησε 1-2 ή 0 για εξοδο"
+                    );
     }
 
 

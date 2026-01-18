@@ -4,11 +4,9 @@ import io.github.amichailides.dto.*;
 import io.github.amichailides.model.Student;
 import io.github.amichailides.service.Service;
 import io.github.amichailides.utils.InputHandler;
+import io.github.amichailides.validation.common.*;
 import io.github.amichailides.validation.student.LevelSanitizer;
-import io.github.amichailides.validation.common.StringSanitizer;
-import io.github.amichailides.validation.common.EmailValidator;
 import io.github.amichailides.validation.student.LevelValidator;
-import io.github.amichailides.validation.common.MobileValidator;
 import io.github.amichailides.validation.student.NameValidator;
 import io.github.amichailides.view.LessonDataEntry;
 import io.github.amichailides.view.StudentDataEntry;
@@ -58,6 +56,7 @@ public class Controller {
                     profile -> printer.printFullProfile(profile),
                     () -> printer.printError("Ο μαθητης με id: " + studentId + " δεν βρεθηκε.")
             );
+            //TODO συνεχιζουμε αφου πηραμε user input να καλουμε την μεθοδο update αν το επιλεξει,
         } catch (NumberFormatException e) {
             printer.printError("Ακυρο ID. Παρακαλω εισαγετε μονο αριθμους.");
         }
@@ -77,9 +76,8 @@ public class Controller {
         }
     }
 
-    public void updateStudent() {
+    public void updateStudent(Long studentId) {
         try {
-            Long studentId = studentEntry.readStudentId();
             StudentUpdateDTO currentData = service.getStudentForUpdate(studentId);
 
             printer.printUpdateHeader();
@@ -104,7 +102,7 @@ public class Controller {
 
             studentId = service.updateStudent(studentId, changedDTO);
 
-            printer.printSuccess("Ο μαθητης με id: %d ενημερωθηκε επιτυχως" + studentId);
+            printer.printSuccess("Ο μαθητης με id: " + studentId + " ενημερωθηκε επιτυχως" );
 
         } catch (RuntimeException e) {
             printer.printError(e.getMessage());
@@ -150,6 +148,33 @@ public class Controller {
         } catch (RuntimeException e) {
             printer.printError("Σφαλμα: " + e.getMessage());
         }
+    }
+
+    public void handleStudentProfile() {
+        Long studentId = studentEntry.readStudentId();
+
+        while (true) {
+            System.out.println("Μεσα στην switch");
+            service.getStudentProfile(studentId).ifPresentOrElse(
+                    profile -> printer.printFullProfile(profile),
+                    () -> printer.printError("Ο μαθητης με id: " + studentId + " δεν βρεθηκε.")
+            );
+            printer.printPostDisplayActions();
+            int userChoice = studentEntry.readLessonUpdateChoice();
+
+            switch (userChoice) {
+                case 1 -> updateStudent(studentId);
+                case 2 -> updateLesson(); //TODO implement update method
+                case 0 -> {
+                    return;
+                }
+            }
+        }
+
+    }
+
+    public void updateLesson(){
+        Long lessonId = lessonEntry.readLessonId();
     }
 
 }

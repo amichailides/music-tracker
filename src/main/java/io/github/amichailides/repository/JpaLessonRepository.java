@@ -4,6 +4,7 @@ import io.github.amichailides.model.Lesson;
 import io.github.amichailides.model.Student;
 import io.github.amichailides.utils.JpaUtil;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceException;
 
 import java.util.List;
 
@@ -66,4 +67,11 @@ public class JpaLessonRepository implements LessonRepository{
         return false;
     }
 
+    public Lesson findById(Long lessonId){
+        try (EntityManager em = JpaUtil.getEntityManager()) {
+            return em.find(Lesson.class, lessonId);
+        } catch (PersistenceException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 }

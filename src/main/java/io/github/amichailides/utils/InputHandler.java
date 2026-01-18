@@ -1,5 +1,7 @@
 package io.github.amichailides.utils;
 
+import io.github.amichailides.validation.common.IntegerSanitizer;
+
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.function.Function;
@@ -56,6 +58,22 @@ public class InputHandler {
             String sanitized = sanitizer.apply(scanner.nextLine());
             Optional<String> result = validator.apply(sanitized);
 
+            if (result.isPresent()){
+                return result.get();
+            }
+
+            System.err.println(errorMessage);
+        }
+    }
+
+    public int readInt(String prompt,
+                       Function<String, String> sanitizer,
+                       Function<String, Optional<Integer>> validator,
+                       String errorMessage) {
+        while (true) {
+            System.out.print(prompt);
+            String sanitized = sanitizer.apply(scanner.nextLine());
+            Optional<Integer> result = validator.apply(sanitized);
             if (result.isPresent()){
                 return result.get();
             }
