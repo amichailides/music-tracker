@@ -1,12 +1,12 @@
 package io.github.amichailides.repository;
 
 import io.github.amichailides.model.Lesson;
-import io.github.amichailides.model.Student;
 import io.github.amichailides.utils.JpaUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
-
+import java.util.Optional;
 import java.util.List;
+
 
 public class JpaLessonRepository implements LessonRepository{
 
@@ -14,7 +14,7 @@ public class JpaLessonRepository implements LessonRepository{
        try (EntityManager em = JpaUtil.getEntityManager()){
            try {
                em.getTransaction().begin();
-               em.persist(lesson);
+               em.merge(lesson);
                em.getTransaction().commit();
            } catch (Exception e) {
                if (em.getTransaction().isActive()) {
@@ -67,9 +67,9 @@ public class JpaLessonRepository implements LessonRepository{
         return false;
     }
 
-    public Lesson findById(Long lessonId){
+    public Optional<Lesson> findById(Long lessonId){
         try (EntityManager em = JpaUtil.getEntityManager()) {
-            return em.find(Lesson.class, lessonId);
+            return Optional.ofNullable(em.find(Lesson.class, lessonId));
         } catch (PersistenceException e) {
             throw new RuntimeException(e.getMessage());
         }

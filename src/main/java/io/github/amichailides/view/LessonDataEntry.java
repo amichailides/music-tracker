@@ -3,6 +3,7 @@ package io.github.amichailides.view;
 import io.github.amichailides.dto.LessonCreateDTO;
 import io.github.amichailides.utils.InputHandler;
 import io.github.amichailides.validation.ValidationConstants;
+import io.github.amichailides.validation.common.IntegerValidator;
 import io.github.amichailides.validation.common.StringSanitizer;
 import io.github.amichailides.validation.student.IdSanitizer;
 import io.github.amichailides.validation.student.IdValidator;
@@ -25,6 +26,7 @@ public class LessonDataEntry {
                 ValidationConstants.INVALID_ID
         );
     }
+
     public String readLessonComments() {
         return inputHandler.readValidated(
                 "Σχολια μαθηματος [Enter για skip]: ",
@@ -54,6 +56,15 @@ public class LessonDataEntry {
                 .comments(defaultIfEmpty(readLessonComments()))
                 .homework(defaultIfEmpty(readLessonHomework()))
                 .build();
+    }
+
+    public int readLessonNumber(int maxCount) {
+        return inputHandler.readInt(
+                "Επιλέξτε τον αριθμό (#) του μαθήματος: ",
+                StringSanitizer::clean,
+                IntegerValidator.isBetween(1, maxCount),
+                "Λάθος επιλογή! Παρακαλώ δώστε έναν αριθμό από 1 έως " + maxCount
+        );
     }
 
     private String defaultIfEmpty(String value) {

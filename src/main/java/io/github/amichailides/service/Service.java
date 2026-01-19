@@ -7,6 +7,7 @@ import io.github.amichailides.model.Student;
 import io.github.amichailides.repository.LessonRepository;
 import io.github.amichailides.repository.StudentRepository;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class Service {
@@ -69,8 +70,8 @@ public class Service {
         });
     }
 
-    public StudentUpdateDTO getStudentForUpdate(Long id) {
-        Student s = studentRepo.findById(id)
+    public StudentUpdateDTO getStudentForUpdate(Long studentId) {
+        Student s = studentRepo.findById(studentId)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
         return StudentUpdateDTO.builder()
                 .firstName(s.getFirstName())
@@ -79,6 +80,12 @@ public class Service {
                 .mobile(s.getMobile())
                 .level(s.getLevel().name())
                 .build();
+    }
+
+    public LessonUpdateDTO getLessonForUpdate(Long lessonId) {
+        return lessonRepo.findById(lessonId)
+                .map(lesson -> LessonUpdateDTO.fromEntity(lesson)) // Μετατροπή σε DTO
+                .orElseThrow(() -> new RuntimeException("Lesson with id " + lessonId + " not found"));
     }
 
     public Long updateStudent(Long id, StudentUpdateDTO changed) {
@@ -109,6 +116,26 @@ public class Service {
 
         return updatedStudent.getId();
 
+    }
+
+    public Long updateLesson(Long lessonId, LessonUpdateDTO changed) {
+        Lesson lesson  = lessonRepo.findById(lessonId)
+                .orElseThrow( ()-> new RuntimeException("Δεν βρεθηκε μαθημα με ID: " + lessonId));
+
+        if (changed.getDate() != null && !changed.getDate().isBlank()) {
+            lesson.setDate(LocalDate.parse(changed.getDate()));
+        }
+
+        if (changed.getComments() !=null && !changed.getComments().isBlank()) {
+            lesson.setComments(changed.getComments());
+        }
+
+        if (changed.getHomework() != null && !changed.getHomework().isBlank()) {
+            lesson.setHomework(changed.getHomework());
+        }
+
+        Lesson updatedLesson = lessonRepo.save(lesson);
+        return updatedLesson.getId();
     }
 
     public StudentListDTO findStudentsByLastName(String lastName){

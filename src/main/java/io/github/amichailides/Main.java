@@ -46,7 +46,7 @@ public class Main {
         System.out.println("1. Εγγραφη νεου μαθητη");
         System.out.println("2. Προβολη ολων των μαθητων");
         System.out.println("3. Προσθηκη μαθηματος σε μαθητη");
-        System.out.println("4. Προβολη ιστορικου μαθηματων");
+        System.out.println("4. Καρτέλα Φοιτητή & Διαχείριση");
         System.out.println("5. Διαγραφη Μαθητη");
         System.out.println("6. Ενημερωση στοιχειων μαθητη (Update)");
         System.out.println("7. Αναζήτηση μαθητή με επώνυμο");

@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public class IntegerValidator {
-    // Επιστρέφει μια συνάρτηση που παίρνει String και βγάζει Optional<Integer>
+    // Επιστρεφει μια συναρτηση που παιρνει String και βγαζει Optional<Integer>
     public static Function<String, Optional<Integer>> isBetween(int min, int max) {
         return input -> {
             try {

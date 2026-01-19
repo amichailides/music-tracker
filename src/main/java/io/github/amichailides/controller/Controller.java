@@ -14,6 +14,7 @@ import io.github.amichailides.view.StudentPrinter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Function;
@@ -49,19 +50,6 @@ public class Controller {
 
     }
 
-    public void displayStudentLessons () {
-        try {
-            Long studentId = studentEntry.readStudentId();
-            service.getStudentProfile(studentId).ifPresentOrElse(
-                    profile -> printer.printFullProfile(profile),
-                    () -> printer.printError("Ο μαθητης με id: " + studentId + " δεν βρεθηκε.")
-            );
-            //TODO συνεχιζουμε αφου πηραμε user input να καλουμε την μεθοδο update αν το επιλεξει,
-        } catch (NumberFormatException e) {
-            printer.printError("Ακυρο ID. Παρακαλω εισαγετε μονο αριθμους.");
-        }
-    }
-
     public void deleteStudent () {
         try {
 
@@ -80,7 +68,7 @@ public class Controller {
         try {
             StudentUpdateDTO currentData = service.getStudentForUpdate(studentId);
 
-            printer.printUpdateHeader();
+            printer.printStudentUpdateHeader();
 
             String newFirstName = readOptional("Όνομα", currentData.getFirstName(), StringSanitizer::clean, NameValidator::isValid);
             String newLastName = readOptional("Επώνυμο", currentData.getLastName(), StringSanitizer::clean, NameValidator::isValid);
@@ -109,6 +97,81 @@ public class Controller {
         }
     }
 
+    public void displayMatchingStudents(){
+        String rawLastName = studentEntry.readStudentLastname();
+        StudentListDTO students = service.findStudentsByLastName(rawLastName);
+        printer.printStudentTable(students.getStudents(), "Αναζητηση: " + rawLastName);
+    }
+
+    public void deleteLesson() {
+        try {
+            Long lessonId = lessonEntry.readLessonId();
+            service.deleteLesson(lessonId);
+            printer.printSuccess("Το μαθημα με ID " + lessonId + "διαγραφηκε.");
+        } catch (RuntimeException e) {
+            printer.printError("Σφαλμα: " + e.getMessage());
+        }
+    }
+
+    public void handleStudentProfile() {
+        Long studentId = studentEntry.readStudentId();
+
+        while (true) {
+            System.out.println("Μεσα στην switch");
+            Optional<StudentProfileDTO> profileOpt = service.getStudentProfile(studentId);
+
+            if (profileOpt.isEmpty()){
+                printer.printError("Ο μαθητης δεν βρεθηκε");
+                return; // returns to main menu
+            }
+
+            StudentProfileDTO profile = profileOpt.get();
+            printer.printFullProfile(profile);
+
+            printer.printPostDisplayActions();
+            int userChoice = studentEntry.readLessonUpdateChoice();
+
+            switch (userChoice) {
+                case 1 -> updateStudent(studentId);
+                case 2 -> updateLesson(profile); //TODO implement update method
+                case 0 -> {
+                    return;
+                }
+            }
+        }
+
+    }
+
+    public void updateLesson(StudentProfileDTO profile){
+
+        try {
+            List<LessonPrintDTO> lessons = profile.getLessons();
+            int choice = lessonEntry.readLessonNumber(lessons.size());
+            //παιρνω id απο το # της λιστας που εκτυπωσα πριν, -1 γιατι ξεκιναει απο το 1 στο print
+            Long lessonId = profile.getLessons().get(choice -1).getId();
+
+            LessonUpdateDTO currentData = service.getLessonForUpdate(lessonId);
+
+            printer.printLessonUpdateHeader();
+
+            String newDate = readOptional("Ημερομηνια (YYYY-MM-DD)", currentData.getDate(), StringSanitizer::clean, NameValidator::isValid);
+            String newComments = readOptional("Σχολια", currentData.getComments(), StringSanitizer::clean,StringValidator::alwaysValid);
+            String newHomework = readOptional("Homework", currentData.getHomework(), StringSanitizer::clean,StringValidator::alwaysValid);
+
+            LessonUpdateDTO changedDTO = LessonUpdateDTO.builder()
+                    .date(newDate)
+                    .comments(newComments)
+                    .homework(newHomework)
+                    .build();
+
+            lessonId = service.updateLesson(lessonId, changedDTO);
+            printer.printSuccess("Το μαθημα με ID: " + lessonId + " ενημερωθηκε επιτυχως");
+        } catch (RuntimeException e) {
+            printer.printError(e.getMessage());
+        }
+
+
+    }
 
     private String readOptional(
             String label,
@@ -132,49 +195,6 @@ public class Controller {
                 "Λάθος μορφή! Ξαναπροσπάθησε ή πάτα Enter για παράκαμψη."
         );
         return input.isBlank() ? currentValue : input;
-    }
-
-    public void displayMatchingStudents(){
-        String rawLastName = studentEntry.readStudentLastname();
-        StudentListDTO students = service.findStudentsByLastName(rawLastName);
-        printer.printStudentTable(students.getStudents(), "Αναζητηση: " + rawLastName);
-    }
-
-    public void deleteLesson() {
-        try {
-            Long lessonId = lessonEntry.readLessonId();
-            service.deleteLesson(lessonId);
-            printer.printSuccess("Το μαθημα με ID " + lessonId + "διαγραφηκε.");
-        } catch (RuntimeException e) {
-            printer.printError("Σφαλμα: " + e.getMessage());
-        }
-    }
-
-    public void handleStudentProfile() {
-        Long studentId = studentEntry.readStudentId();
-
-        while (true) {
-            System.out.println("Μεσα στην switch");
-            service.getStudentProfile(studentId).ifPresentOrElse(
-                    profile -> printer.printFullProfile(profile),
-                    () -> printer.printError("Ο μαθητης με id: " + studentId + " δεν βρεθηκε.")
-            );
-            printer.printPostDisplayActions();
-            int userChoice = studentEntry.readLessonUpdateChoice();
-
-            switch (userChoice) {
-                case 1 -> updateStudent(studentId);
-                case 2 -> updateLesson(); //TODO implement update method
-                case 0 -> {
-                    return;
-                }
-            }
-        }
-
-    }
-
-    public void updateLesson(){
-        Long lessonId = lessonEntry.readLessonId();
     }
 
 }

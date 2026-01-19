@@ -28,11 +28,14 @@ public class StudentPrinter {
             System.out.println(" ΙΣΤΟΡΙΚΟ ΜΑΘΗΜΑΤΩΝ:");
             System.out.printf(" %-2s | %-15s | %-35s | %-35s%n","ID", "ΗΜΕΡΟΜΗΝΙΑ", "HOMEWORK / ΑΣΚΗΣΕΙΣ", "ΣΧΟΛΙΑ ΔΑΣΚΑΛΟΥ");
             System.out.println(" " + "-".repeat(92));
-            lessons.forEach(l -> {
-                        System.out.printf(" %-2s | %-15s | %-35s | %-35s%n",
-                                l.getId(), l.getDate(), l.getHomework(), l.getComments());
+            int counter = 1;
+            for (LessonPrintDTO l : profile.getLessons()) {
+                System.out.printf(" %-2s | %-15s | %-35s | %-35s%n",
+                        counter++,
+                        l.getDate(),
+                        l.getHomework(),
+                        l.getComments());
                     }
-            );
 
         }
     }
@@ -68,7 +71,7 @@ public class StudentPrinter {
         System.out.println("\n ΣΦΑΛΜΑ: " + message);
     }
 
-    public void printUpdateHeader() {
+    public void printStudentUpdateHeader() {
         System.out.println("\n==========================================");
         System.out.println("       ΕΝΗΜΕΡΩΣΗ ΣΤΟΙΧΕΙΩΝ ΜΑΘΗΤΗ");
         System.out.println("==========================================");
@@ -78,9 +81,19 @@ public class StudentPrinter {
         System.out.println("------------------------------------------");
     }
 
+    public void printLessonUpdateHeader() {
+        System.out.println("\n==========================================");
+        System.out.println("       ΕΝΗΜΕΡΩΣΗ ΣΤΟΙΧΕΙΩΝ ΜΑΘΗΜΑΤΟΣ");
+        System.out.println("==========================================");
+        System.out.println("   Οδηγια: Πατηστε [ENTER] σε οποιοδηποτε");
+        System.out.println("   πεδιο για να διατηρησετε την υπρχουσα");
+        System.out.println("   τιμη χωρις αλλαγη.");
+        System.out.println("------------------------------------------");
+    }
+
     public void printPostDisplayActions() {
         System.out.println("\n====================");
-        System.out.println("1. Update Student");
+        System.out.println("1. Ενημέρωση Στοιχείων Φοιτητή");
         System.out.println("2. Update Lesson");
         System.out.println("0. Back to main menu");
         System.out.println("====================");
