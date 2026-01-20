@@ -1,6 +1,7 @@
 package io.github.amichailides.controller;
 
 import io.github.amichailides.dto.*;
+import io.github.amichailides.model.Lesson;
 import io.github.amichailides.model.Student;
 import io.github.amichailides.service.Service;
 import io.github.amichailides.utils.InputHandler;
@@ -103,21 +104,10 @@ public class Controller {
         printer.printStudentTable(students.getStudents(), "Αναζητηση: " + rawLastName);
     }
 
-    public void deleteLesson() {
-        try {
-            Long lessonId = lessonEntry.readLessonId();
-            service.deleteLesson(lessonId);
-            printer.printSuccess("Το μαθημα με ID " + lessonId + "διαγραφηκε.");
-        } catch (RuntimeException e) {
-            printer.printError("Σφαλμα: " + e.getMessage());
-        }
-    }
-
     public void handleStudentProfile() {
         Long studentId = studentEntry.readStudentId();
 
         while (true) {
-            System.out.println("Μεσα στην switch");
             Optional<StudentProfileDTO> profileOpt = service.getStudentProfile(studentId);
 
             if (profileOpt.isEmpty()){
@@ -128,16 +118,16 @@ public class Controller {
             StudentProfileDTO profile = profileOpt.get();
             printer.printFullProfile(profile);
 
-            printer.printPostDisplayActions();
-            int userChoice = studentEntry.readLessonUpdateChoice();
+            boolean hasLessons = !profile.getLessons().isEmpty();
+            int maxChoice = hasLessons ? 3 : 1;
+            printer.printPostDisplayActions(hasLessons);
+            int userChoice = studentEntry.readLessonUpdateChoice(maxChoice);
 
-            switch (userChoice) {
-                case 1 -> updateStudent(studentId);
-                case 2 -> updateLesson(profile); //TODO implement update method
-                case 0 -> {
-                    return;
-                }
-            }
+
+
+           if (!handleUserAction(userChoice, profile, studentId)) {
+               return;
+           }
         }
 
     }
@@ -170,7 +160,37 @@ public class Controller {
             printer.printError(e.getMessage());
         }
 
+    }
 
+    public void deleteLesson(StudentProfileDTO profile) {
+        try {
+            List<LessonPrintDTO> lessons = profile.getLessons();
+            if (lessons.isEmpty()) {
+                printer.printError(" [!] Δεν βρέθηκε ιστορικό μαθημάτων για τον συγκεκριμένο μαθητή.");
+                return;
+            }
+            int choice = lessonEntry.readLessonNumber(lessons.size());
+            Long lessonId = lessons.get(choice -1).getId();
+
+
+
+            service.deleteLesson(lessonId);
+        } catch (RuntimeException e) {
+            printer.printError("Σφαλμα κατα την διαγραφη: " + e.getMessage());
+        }
+
+
+
+    }
+
+    private boolean handleUserAction (int choice, StudentProfileDTO profile, Long studentId){
+        switch (choice) {
+            case 1 -> updateStudent(studentId);
+            case 2 -> updateLesson(profile);
+            case 3 -> deleteLesson(profile);
+            case 0 -> {return false;}
+        }
+        return true;
     }
 
     private String readOptional(

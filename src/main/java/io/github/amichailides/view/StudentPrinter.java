@@ -91,24 +91,15 @@ public class StudentPrinter {
         System.out.println("------------------------------------------");
     }
 
-    public void printPostDisplayActions() {
-        System.out.println("\n====================");
-        System.out.println("1. Ενημέρωση Στοιχείων Φοιτητή");
-        System.out.println("2. Update Lesson");
-        System.out.println("0. Back to main menu");
-        System.out.println("====================");
-
-    }
-
-    public void clearScreen() {
-        try {
-            // Δημιουργούμε μια διεργασία που εκτελεί την εντολή 'cls' των Windows
-            // Το .inheritIO() συνδέει την έξοδο της εντολής με την κονσόλα της Java
-            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-        } catch (Exception e) {
-            // Εδώ δεν κάνουμε τίποτα - αν το σύστημα δεν υποστηρίζει cls,
-            // απλά συνεχίζουμε χωρίς να "βρωμίζουμε" την οθόνη.
+    public void printPostDisplayActions(boolean hasLessons) {
+        System.out.println("\n=============================");
+        System.out.println("1. Ενημέρωση Στοιχείων Μαθητή");
+        if (hasLessons) {
+            System.out.println("2. Ενημέρωση Μαθήματος");
+            System.out.println("3. Διαγραφή Μαθήματος");
         }
+        System.out.println("0. Επιστροφή");
+        System.out.println("=============================");
     }
 
 }

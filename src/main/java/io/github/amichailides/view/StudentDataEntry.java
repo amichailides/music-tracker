@@ -66,10 +66,10 @@ public class StudentDataEntry {
         );
     }
 
-    public int readLessonUpdateChoice() {
+    public int readLessonUpdateChoice(int maxChoice) {
         return inputHandler.readInt("Επιλεξτε ενεργεια: ",
         IntegerSanitizer::clean,
-                IntegerValidator.isBetween(0,2),
+                IntegerValidator.isBetween(0,maxChoice),
                 "λαθος επιλογη, πατησε 1-2 ή 0 για εξοδο"
                     );
     }

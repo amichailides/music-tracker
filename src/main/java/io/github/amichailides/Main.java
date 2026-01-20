@@ -29,7 +29,7 @@ public class Main {
                     case 4 -> controller.handleStudentProfile();
                     case 5 -> controller.deleteStudent();
                     case 7 -> controller.displayMatchingStudents();
-                    case 8 -> controller.deleteLesson();
+                    //case 8 -> controller.deleteLesson();
                     case 0 -> isRunning = false;
                 }
 
