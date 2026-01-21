@@ -67,11 +67,15 @@ public class StudentDataEntry {
     }
 
     public int readLessonUpdateChoice(int maxChoice) {
+
+        String validOptions = (maxChoice == 3) ? "1, 2, 3 ή 0" : "1 ή 0";
+        String errorMsg = "Μη εγκυρη επιλογη. Διαθεσιμες ενεργειες: " + validOptions;
+
         return inputHandler.readInt("Επιλεξτε ενεργεια: ",
-        IntegerSanitizer::clean,
-                IntegerValidator.isBetween(0,maxChoice),
-                "λαθος επιλογη, πατησε 1-2 ή 0 για εξοδο"
-                    );
+                IntegerSanitizer::clean,
+                IntegerValidator.isBetween(0, maxChoice),
+                errorMsg
+        );
     }
 
     public StudentCreateDTO collectStudentData() {
@@ -84,5 +88,15 @@ public class StudentDataEntry {
                 .level(SkillLevel.valueOf(readStudentLevel()))
                 .build();
 
+    }
+
+    public boolean confirmDeletion(String entityName) {
+        String prompt = String.format("\u001B[33m[!] Είστε σίγουροι ότι θέλετε να διαγράψετε το %s; (y/n): \u001B[0m", entityName);
+
+        return inputHandler.readBoolean(prompt,
+                StringSanitizer::clean,
+                BooleanValidator::isYesNo,
+                ValidationConstants.INVALID_YES_NO_INPUT
+        );
     }
 }

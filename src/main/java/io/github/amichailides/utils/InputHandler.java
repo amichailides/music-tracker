@@ -1,17 +1,19 @@
 package io.github.amichailides.utils;
 
-import io.github.amichailides.validation.common.IntegerSanitizer;
+import io.github.amichailides.view.StudentPrinter;
 
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.function.Function;
-import java.util.function.Predicate;
+
 
 public class InputHandler {
     private final Scanner scanner;
+    private final StudentPrinter printer;
 
-    public InputHandler(Scanner scanner) {
+    public InputHandler(Scanner scanner, StudentPrinter printer) {
         this.scanner = scanner;
+        this.printer = printer;
     }
 
     public String readValidated (String prompt,
@@ -19,7 +21,7 @@ public class InputHandler {
                                  Function<String, Optional<String>> validator,
                                  String errorMessage) {
         while (true){
-            System.out.print(prompt);
+            printer.printPrompt(prompt);
             String sanitized = sanitizer.apply(scanner.nextLine());
 
             Optional<String> result = validator.apply(sanitized);
@@ -37,7 +39,7 @@ public class InputHandler {
                          Function<String, Optional<Long>> validator,
                          String errorMessage) {
         while (true) {
-            System.out.print(prompt);
+            printer.printPrompt(prompt);
             String sanitized = sanitizer.apply(scanner.nextLine()); // Διαβάζουμε ως String για ασφάλεια
 
             Optional<Long> result = validator.apply(sanitized);
@@ -45,7 +47,7 @@ public class InputHandler {
             if(result.isPresent()){
                 return result.get();
             }
-            System.err.println(errorMessage);
+            printer.printError(errorMessage);
         }
     }
 
@@ -54,7 +56,7 @@ public class InputHandler {
                              Function<String, Optional<String>> validator,
                              String errorMessage) {
         while (true) {
-            System.out.print(prompt);
+            printer.printPrompt(prompt);
             String sanitized = sanitizer.apply(scanner.nextLine());
             Optional<String> result = validator.apply(sanitized);
 
@@ -62,7 +64,7 @@ public class InputHandler {
                 return result.get();
             }
 
-            System.err.println(errorMessage);
+            printer.printError(errorMessage);
         }
     }
 
@@ -71,15 +73,33 @@ public class InputHandler {
                        Function<String, Optional<Integer>> validator,
                        String errorMessage) {
         while (true) {
-            System.out.print(prompt);
+            printer.printPrompt(prompt);
             String sanitized = sanitizer.apply(scanner.nextLine());
             Optional<Integer> result = validator.apply(sanitized);
             if (result.isPresent()){
                 return result.get();
             }
 
-            System.err.println(errorMessage);
+            printer.printError(errorMessage);
         }
+    }
+
+    public boolean readBoolean(String prompt,
+                               Function<String, String> sanitizer,
+                               Function<String, Optional<Boolean>> validator,
+                               String errorMessage) {
+        while (true) {
+            printer.printPrompt(prompt);
+            String sanitized = sanitizer.apply(scanner.nextLine());
+            Optional<Boolean> result = validator.apply(sanitized);
+
+            if (result.isPresent()) {
+                return result.get();
+            }
+
+            printer.printError(errorMessage);
+        }
+
     }
 
 }

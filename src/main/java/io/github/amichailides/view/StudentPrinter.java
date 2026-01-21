@@ -79,6 +79,10 @@ public class StudentPrinter {
         System.out.println("\n (i) " + message);
     }
 
+    public void printPrompt(String message) {
+        System.out.print(message);
+    }
+
     public void printStudentUpdateHeader() {
         System.out.println("\n==========================================");
         System.out.println("       ΕΝΗΜΕΡΩΣΗ ΣΤΟΙΧΕΙΩΝ ΜΑΘΗΤΗ");

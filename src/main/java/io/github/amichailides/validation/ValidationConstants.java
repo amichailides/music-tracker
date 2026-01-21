@@ -18,4 +18,5 @@ public class ValidationConstants {
     public static final String INVALID_PHONE = "Σφάλμα! Εισάγετε 10 ψηφία (π.χ. 6971234567). Διεθνή πρόσημα όπως +30 επιτρέπονται.";
     public static final String INVALID_LEVEL = "Μη έγκυρο επίπεδο. Παρακαλώ πληκτρολογήστε μία από τις διαθέσιμες επιλογές: BASIC, INTERMEDIATE, ADVANCED.";
     public static final String INVALID_ID = "Σφαλμα: Το ID πρεπει να ειναι θετικος αριθμος";
+    public static final String INVALID_YES_NO_INPUT = "Παρακαλώ πατήστε 'y' για Ναι ή 'n' για Όχι.";
 }

@@ -171,16 +171,18 @@ public class Controller {
             int choice = lessonEntry.readLessonNumber(lessons.size());
             Long lessonId = lessons.get(choice -1).getId();
 
+            if (studentEntry.confirmDeletion("Μαθημα")) {
+                service.deleteLesson(lessonId);
+                printer.printSuccess("Το μαθημα διαγραφηκε επιτυχως.");
+            } else {
+                printer.printError("Ηδ διαγραφη ακυρωθηκε απο τον χρηστη");
+            }
 
-
-            service.deleteLesson(lessonId);
         } catch (RuntimeException e) {
             printer.printError("Σφαλμα κατα την διαγραφη: " + e.getMessage());
         }
-
-
-
     }
+
 
     private boolean handleUserAction (int choice, StudentProfileDTO profile, Long studentId){
         switch (choice) {

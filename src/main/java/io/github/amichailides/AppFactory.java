@@ -21,7 +21,7 @@ public class AppFactory {
 
         Service service = new Service(studentRepo, lessonRepo);
 
-        InputHandler inputHandler = new InputHandler(scanner);
+        InputHandler inputHandler = new InputHandler(scanner, printer);
 
 
         StudentDataEntry studentEntry = new StudentDataEntry(inputHandler);
