@@ -23,7 +23,7 @@ public class StudentPrinter {
 
 
         if (lessons.isEmpty()) {
-            System.out.println(" [!] Δεν βρέθηκε ιστορικό μαθημάτων για τον συγκεκριμένο μαθητή.");
+            printInfo(" [!] Δεν βρέθηκε ιστορικό μαθημάτων για τον συγκεκριμένο μαθητή.");
         } else {
             System.out.println(" ΙΣΤΟΡΙΚΟ ΜΑΘΗΜΑΤΩΝ:");
             System.out.printf(" %-2s | %-15s | %-35s | %-35s%n","ID", "ΗΜΕΡΟΜΗΝΙΑ", "HOMEWORK / ΑΣΚΗΣΕΙΣ", "ΣΧΟΛΙΑ ΔΑΣΚΑΛΟΥ");
@@ -45,7 +45,7 @@ public class StudentPrinter {
         System.out.println("\n=== " + header.toUpperCase() + " ===");
 
         if (students == null || students.isEmpty()) {
-            System.out.println("Δεν βρέθηκαν μαθητές για εκτύπωση.");
+            printInfo("Δεν βρέθηκαν μαθητές για εκτύπωση.");
             return;
         }
 
@@ -64,11 +64,19 @@ public class StudentPrinter {
     }
 
     public void printSuccess(String message) {
-        System.out.println("\n ΕΠΙΤΥΧΙΑ: " + message);
+        String greenColor = "\u001B[32m";
+        String resetColor = "\u001B[0m";
+
+        System.out.println("\n" + greenColor + " ✔ ΕΠΙΤΥΧΙΑ: " + message + resetColor);
     }
 
     public void printError(String message) {
-        System.out.println("\n ΣΦΑΛΜΑ: " + message);
+        System.out.println("\u001B[31m" + "\n ΣΦΑΛΜΑ: " + message + "\u001B[0m");
+    }
+
+    public void printInfo(String message) {
+        // χωρις ΣΦΑΛΜΑ
+        System.out.println("\n (i) " + message);
     }
 
     public void printStudentUpdateHeader() {

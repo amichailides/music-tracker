@@ -74,7 +74,6 @@ public class StudentDataEntry {
                     );
     }
 
-
     public StudentCreateDTO collectStudentData() {
 
         return StudentCreateDTO.builder()

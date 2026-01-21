@@ -1,7 +1,6 @@
 package io.github.amichailides.controller;
 
 import io.github.amichailides.dto.*;
-import io.github.amichailides.model.Lesson;
 import io.github.amichailides.model.Student;
 import io.github.amichailides.service.Service;
 import io.github.amichailides.utils.InputHandler;
@@ -39,7 +38,7 @@ public class Controller {
 
     public void displayAllStudents () {
         StudentListDTO allStudents = service.prepareStudentsForPrint();
-        printer.printStudentTable(allStudents.getStudents(), "Ολοι μαθητες");
+        printer.printStudentTable(allStudents.getStudents(), "Μητρώο Μαθητών");
     }
 
     public void addLessonToStudent () {
@@ -101,7 +100,7 @@ public class Controller {
     public void displayMatchingStudents(){
         String rawLastName = studentEntry.readStudentLastname();
         StudentListDTO students = service.findStudentsByLastName(rawLastName);
-        printer.printStudentTable(students.getStudents(), "Αναζητηση: " + rawLastName);
+        printer.printStudentTable(students.getStudents(), "Αποτελεσματα Αναζητησης: " + rawLastName);
     }
 
     public void handleStudentProfile() {
@@ -189,6 +188,7 @@ public class Controller {
             case 2 -> updateLesson(profile);
             case 3 -> deleteLesson(profile);
             case 0 -> {return false;}
+            default -> {return true;}
         }
         return true;
     }

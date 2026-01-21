@@ -3,38 +3,41 @@ package io.github.amichailides;
 import io.github.amichailides.controller.Controller;
 import io.github.amichailides.dto.*;
 import io.github.amichailides.repository.*;
+import io.github.amichailides.view.StudentPrinter;
+
 import java.util.Scanner;
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
+
 
 public class Main {
     public static void main(String[] args) {
-        try {
-            System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
-        } catch (Exception ignored) {}
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(java.util.logging.Level.SEVERE);
         Scanner scanner = new Scanner(System.in);
+        StudentPrinter printer = new StudentPrinter();
 
-        Controller controller = AppFactory.createController(scanner);
+        Controller controller = AppFactory.createController(scanner, printer);
 
         boolean isRunning = true;
         do {
             try {
                 printMenu();
+
                 int inputAction = Integer.parseInt(scanner.nextLine());
+
                 switch (inputAction) {
                     case 1 -> controller.registerStudent();
                     case 2 -> controller.displayAllStudents();
-                    case 3 -> controller.addLessonToStudent();
-                    case 4 -> controller.handleStudentProfile();
-                    case 5 -> controller.deleteStudent();
-                    case 7 -> controller.displayMatchingStudents();
-                    //case 8 -> controller.deleteLesson();
+                    case 3 -> controller.displayMatchingStudents(); // Αναζήτηση (πρώην 7)
+                    case 4 -> controller.addLessonToStudent();
+                    case 5 -> controller.handleStudentProfile();    // Καρτέλα & Διαχείριση
+                    case 6 -> controller.deleteStudent();           // Διαγραφή (τελευταία επιλογή)
                     case 0 -> isRunning = false;
+                    default -> printer.printError("Μη έγκυρη επιλογή. Παρακαλώ επιλέξτε από 0 έως 6.");
                 }
 
-            }catch (IllegalArgumentException | IllegalStateException e) {
-                System.out.println("Σφαλμα -> " + e.getMessage());
+            } catch (NumberFormatException e) {
+                printer.printError("Παρακαλώ εισάγετε μόνο αριθμούς.");
+            } catch (IllegalArgumentException | IllegalStateException e) {
+                printer.printError(e.getMessage());
             }
         } while (isRunning);
 
@@ -42,17 +45,19 @@ public class Main {
     }
 
     private static void printMenu() {
-        System.out.println("\n=== MUSIC TRACKER MENU ===");
-        System.out.println("1. Εγγραφη νεου μαθητη");
-        System.out.println("2. Προβολη ολων των μαθητων");
-        System.out.println("3. Προσθηκη μαθηματος σε μαθητη");
-        System.out.println("4. Καρτέλα Φοιτητή & Διαχείριση");
-        System.out.println("5. Διαγραφη Μαθητη");
-        System.out.println("6. Ενημερωση στοιχειων μαθητη (Update)");
-        System.out.println("7. Αναζήτηση μαθητή με επώνυμο");
-        System.out.println("8. Διαγραφη μαθηματος");
+        System.out.println("\n" + "=".repeat(30));
+        System.out.println("      MUSIC TRACKER MENU");
+        System.out.println("=".repeat(30));
+        System.out.println("1. Εγγραφή νέου μαθητή");
+        System.out.println("2. Προβολή όλων των μαθητών");
+        System.out.println("3. Αναζήτηση μαθητή (Επώνυμο)");
+        System.out.println("4. Προσθήκη μαθήματος");
+        System.out.println("5. Καρτέλα Μαθητή & Διαχείριση");
+        System.out.println("6. Διαγραφή Μαθητή");
+        System.out.println("-".repeat(30));
         System.out.println("0. Έξοδος");
-        System.out.print("Επιλέξτε ενέργεια: ");
+        System.out.println("=".repeat(30));
+        System.out.print("Επιλογή: ");
     }
 
 }

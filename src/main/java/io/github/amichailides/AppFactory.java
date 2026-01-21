@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 public class AppFactory {
 
-    public static Controller createController(Scanner scanner) {
+    public static Controller createController(Scanner scanner, StudentPrinter printer) {
 
         StudentRepository studentRepo = new JpaStudentRepository();
         LessonRepository lessonRepo = new JpaLessonRepository();
@@ -22,7 +22,6 @@ public class AppFactory {
         Service service = new Service(studentRepo, lessonRepo);
 
         InputHandler inputHandler = new InputHandler(scanner);
-        StudentPrinter printer = new StudentPrinter();
 
 
         StudentDataEntry studentEntry = new StudentDataEntry(inputHandler);
