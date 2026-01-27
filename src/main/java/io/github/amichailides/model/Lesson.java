@@ -2,13 +2,14 @@ package io.github.amichailides.model;
 
 import io.github.amichailides.dto.LessonCreateDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import java.time.LocalDate;
+import lombok.*;
 
-@Data
+import java.time.LocalDate;
+import java.util.Objects;
+import java.util.UUID;
+
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,6 +20,10 @@ public class Lesson {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false, updatable = false)
+    @Builder.Default
+    private String uuid = UUID.randomUUID().toString();
+
     @Column(name = "lesson_date")
     private LocalDate date;
 
@@ -28,9 +33,21 @@ public class Lesson {
     @Column(name = "homework")
     private String homework;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
     private Student student;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Lesson that)) return false;
+        return Objects.equals(uuid, that.uuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(uuid);
+    }
 
     public static Lesson createFromDTO(LessonCreateDTO dto) {
         return Lesson.builder()

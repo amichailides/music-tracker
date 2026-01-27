@@ -2,15 +2,12 @@ package io.github.amichailides.model;
 
 import io.github.amichailides.dto.StudentCreateDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -20,6 +17,10 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true, nullable = false, updatable = false)
+    @Builder.Default
+    private String uuid = UUID.randomUUID().toString();
 
     @Column(name = "first_name")
     private String firstName;
@@ -39,7 +40,29 @@ public class Student {
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true )
     @Builder.Default // if no insert -> builder inserts new ArrayList<>(); -> no NullPointException
-    private List<Lesson> lessons = new ArrayList<>();
+    private Set<Lesson> lessons = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Student that)) return false;
+        return Objects.equals(uuid,that.uuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(uuid);
+    }
+
+    public void addLesson(Lesson lesson) {
+        lessons.add(lesson);
+        lesson.setStudent(this);
+    }
+
+    public void removeLesson(Lesson lesson) {
+        this.lessons.remove(lesson);
+        lesson.setStudent(null);
+    }
 
     public static Student createFromDTO(StudentCreateDTO dto) {
         //creates empty lessons list because @Builder.Default

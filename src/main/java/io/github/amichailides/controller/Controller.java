@@ -163,6 +163,7 @@ public class Controller {
 
     public void deleteLesson(StudentProfileDTO profile) {
         try {
+            Long studentId = profile.getStudentDetails().getId();
             List<LessonPrintDTO> lessons = profile.getLessons();
             if (lessons.isEmpty()) {
                 printer.printError(" [!] Δεν βρέθηκε ιστορικό μαθημάτων για τον συγκεκριμένο μαθητή.");
@@ -172,7 +173,7 @@ public class Controller {
             Long lessonId = lessons.get(choice -1).getId();
 
             if (studentEntry.confirmDeletion("Μαθημα")) {
-                service.deleteLesson(lessonId);
+                service.deleteLesson(studentId,lessonId);
                 printer.printSuccess("Το μαθημα διαγραφηκε επιτυχως.");
             } else {
                 printer.printError("Ηδ διαγραφη ακυρωθηκε απο τον χρηστη");

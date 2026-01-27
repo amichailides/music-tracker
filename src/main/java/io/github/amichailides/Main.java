@@ -26,10 +26,10 @@ public class Main {
                 switch (inputAction) {
                     case 1 -> controller.registerStudent();
                     case 2 -> controller.displayAllStudents();
-                    case 3 -> controller.displayMatchingStudents(); // Αναζήτηση (πρώην 7)
+                    case 3 -> controller.displayMatchingStudents();
                     case 4 -> controller.addLessonToStudent();
-                    case 5 -> controller.handleStudentProfile();    // Καρτέλα & Διαχείριση
-                    case 6 -> controller.deleteStudent();           // Διαγραφή (τελευταία επιλογή)
+                    case 5 -> controller.handleStudentProfile();
+                    case 6 -> controller.deleteStudent();
                     case 0 -> isRunning = false;
                     default -> printer.printError("Μη έγκυρη επιλογή. Παρακαλώ επιλέξτε από 0 έως 6.");
                 }

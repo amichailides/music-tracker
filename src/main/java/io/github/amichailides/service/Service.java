@@ -32,7 +32,7 @@ public class Service {
                 .orElseThrow(() -> new RuntimeException("Student not found with id: " + studentId));
 
         Lesson lesson = Lesson.createFromDTO(dto);
-        lesson.setStudent(student);
+        student.addLesson(lesson);
 
         return lessonRepo.save(lesson);
     }
@@ -149,11 +149,17 @@ public class Service {
         return new StudentListDTO(printDTOS);
     }
 
-    public void deleteLesson(Long lessonId) {
-        boolean isDeleted = lessonRepo.deleteById(lessonId);
-        if (!isDeleted) {
-            throw new RuntimeException("Το μαθημα με ID " + lessonId + "δεν βρεθηκε");
-        }
+    public void deleteLesson(Long studentId, Long lessonId) {
+        Student student = studentRepo.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student with ID " + studentId + " not found"));
+
+        Lesson lesson = student.getLessons().stream()
+                .filter(l -> l.getId().equals(lessonId))
+                .findFirst()
+                .orElseThrow( () -> new RuntimeException("Το μαθημα δεν βρεθηκε"));
+
+        student.removeLesson(lesson);
+
     }
 
 }
