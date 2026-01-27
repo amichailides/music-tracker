@@ -44,19 +44,14 @@ public class JpaLessonRepository implements LessonRepository{
         }
     }
 
-    public boolean deleteById (Long lessonId) {
+    public void delete (Lesson lesson) {
         try (EntityManager em = JpaUtil.getEntityManager()){
             try {
                 em.getTransaction().begin();
-                Lesson lesson = em.find(Lesson.class, lessonId);
+                Lesson managedLesson = em.merge(lesson);
+                em.remove(managedLesson);
+                em.getTransaction().commit();
 
-                if (lesson != null){
-                    em.remove(lesson);
-                    em.getTransaction().commit();
-                    return true;
-                }
-                //in case lesson == null -> rollback
-                em.getTransaction().rollback();
             } catch (Exception e) {
                 if (em.getTransaction().isActive()) {
                     em.getTransaction().rollback();
@@ -64,7 +59,7 @@ public class JpaLessonRepository implements LessonRepository{
                 throw new RuntimeException("Σφαλμα κατα την διαγραφη μαθηματος ->" + e.getMessage() );
             }
         }
-        return false;
+
     }
 
     public Optional<Lesson> findById(Long lessonId){

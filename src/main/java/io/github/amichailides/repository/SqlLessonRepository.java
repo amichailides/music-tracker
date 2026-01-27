@@ -70,9 +70,9 @@ public class SqlLessonRepository implements LessonRepository {
 
     }
 
-    public boolean deleteById (Long studentId) { // αυτο εδω θα το κανουμε να παιρνει id lesson και να σβηνει καποιο μαθημα
+    public void delete (Lesson lesson) { // αυτο εδω θα το κανουμε να παιρνει id lesson και να σβηνει καποιο μαθημα
     //TODO
-        return true;
+
     }
 
     public Optional<Lesson> findById(Long lessonId){

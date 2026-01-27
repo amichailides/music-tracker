@@ -24,6 +24,7 @@ public class Lesson {
     @Builder.Default
     private String uuid = UUID.randomUUID().toString();
 
+
     @Column(name = "lesson_date")
     private LocalDate date;
 
@@ -36,6 +37,7 @@ public class Lesson {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
     private Student student;
+
 
     @Override
     public boolean equals(Object o) {

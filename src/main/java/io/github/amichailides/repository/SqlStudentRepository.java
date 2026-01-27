@@ -162,22 +162,25 @@ public class SqlStudentRepository implements StudentRepository {
     }
 
     @Override
-    public boolean deleteById(Long studentId) {
-        Objects.requireNonNull(studentId, "StudentId can't be null");
+    public void delete(Student student) {
+        Objects.requireNonNull(student, "StudentId can't be null");
 
         String query = "DELETE FROM students WHERE id = ? ";
 
         try (Connection conn = DriverManager.getConnection(url, user, password);
              PreparedStatement pstm = conn.prepareStatement(query)) {
 
-            pstm.setLong(1, studentId);
+            pstm.setLong(1, student.getId());
             int rowsAffected = pstm.executeUpdate();
-
-            return rowsAffected > 0;
 
         } catch (SQLException e) {
             throw new RuntimeException("Σφαλμα κατα την διαγραφη του μαθητη: " + e.getMessage(), e);
         }
+    }
+
+    public Optional<Student> findByIdWithLessons(Long id) {
+        //TODO
+        return Optional.empty();
     }
 
 }

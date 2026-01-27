@@ -50,19 +50,28 @@ public class JpaStudentRepository implements StudentRepository{
         }
     }
 
+    public Optional<Student> findByIdWithLessons(Long id) {
+        try (EntityManager em = JpaUtil.getEntityManager()) {
+            List<Student> results = em.createQuery(
+                            "SELECT s FROM Student s LEFT JOIN FETCH s.lessons WHERE s.id = :id",
+                            Student.class)
+                    .setParameter("id", id)
+                    .getResultList();
+            return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
+        }
+    }
+
     @Override
-    public boolean deleteById (Long studentId) {
+    public void delete (Student student) {
         try (EntityManager em = JpaUtil.getEntityManager()){
             try {
                 em.getTransaction().begin();
-                Student student = em.find(Student.class, studentId);
-                if (student != null){
-                    em.remove(student);
-                    em.getTransaction().commit();
-                    return true;
-                }
+
+                Student managedStudent = em.merge(student);
+
+                em.remove(managedStudent);
+
                 em.getTransaction().commit();
-                return false;
             }catch (Exception e) {
                 // if something goes badly, αναιρει οτι εχει προλαβει να εκτελεσει
                 if (em.getTransaction().isActive()) {

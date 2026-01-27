@@ -8,6 +8,6 @@ import java.util.Optional;
 public interface LessonRepository {
     Lesson save(Lesson lesson);
     List<Lesson> findByStudentId(Long studentId);
-    boolean deleteById (Long studentId);
+    void delete (Lesson lesson);
     Optional<Lesson> findById(Long lessonId);
 }

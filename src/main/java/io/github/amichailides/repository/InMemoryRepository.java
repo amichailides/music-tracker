@@ -40,12 +40,17 @@ public class InMemoryRepository implements StudentRepository {
     }
 
     @Override
-    public boolean deleteById(Long id) {
-        return database.remove(id) != null; // Απλό και γρήγορο στο Map
+    public void delete(Student student) {
+        database.remove(student.getId());
     }
 
     @Override
     public boolean existsById(Long id) {
         return database.containsKey(id);
+    }
+
+    public Optional<Student> findByIdWithLessons(Long id) {
+        //TODO
+        return Optional.empty();
     }
 }

@@ -28,8 +28,8 @@ public class Service {
         Objects.requireNonNull(studentId, "ID can't be null");
         Objects.requireNonNull(dto, "DTO can't be null");
 
-        Student student = studentRepo.findById(studentId)
-                .orElseThrow(() -> new RuntimeException("Student not found with id: " + studentId));
+        Student student = studentRepo.findByIdWithLessons(studentId)
+                .orElseThrow(() -> new RuntimeException("Δεν βρεθηκε μαθητης με το ID: " + studentId));
 
         Lesson lesson = Lesson.createFromDTO(dto);
         student.addLesson(lesson);
@@ -50,11 +50,11 @@ public class Service {
     public void deleteStudent(Long id) {
         Objects.requireNonNull(id, "id can't be null");
 
-        boolean deleted = studentRepo.deleteById(id);
+        Student student = studentRepo.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Δεν βρεθηκε μαθητης με το ID: " + id));
 
-        if (!deleted) {
-            throw new NoSuchElementException("Ο μαθητής δεν βρέθηκε.");
-        }
+        studentRepo.delete(student);
+
     }
 
     public Optional<StudentProfileDTO> getStudentProfile(Long studentId){
@@ -151,7 +151,7 @@ public class Service {
 
     public void deleteLesson(Long studentId, Long lessonId) {
         Student student = studentRepo.findById(studentId)
-                .orElseThrow(() -> new RuntimeException("Student with ID " + studentId + " not found"));
+                .orElseThrow(() -> new RuntimeException("Ο μαθητης με ID: [" + studentId + "] δεν βρεθηκε"));
 
         Lesson lesson = student.getLessons().stream()
                 .filter(l -> l.getId().equals(lessonId))
@@ -159,6 +159,8 @@ public class Service {
                 .orElseThrow( () -> new RuntimeException("Το μαθημα δεν βρεθηκε"));
 
         student.removeLesson(lesson);
+
+        lessonRepo.delete(lesson);
 
     }
 
