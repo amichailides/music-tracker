@@ -13,7 +13,8 @@ import java.util.*;
 public class Service {
     private final StudentRepository studentRepo;
     private final LessonRepository lessonRepo;
-
+    // TODO: Χρησιμοποίησε την απλή findById για ανάγνωση βασικών στοιχείων (ταχύτητα).
+    // TODO: Χρησιμοποίησε την findByIdWithLessons όταν χρειάζεται πρόσβαση ή τροποποίηση στα Lessons (αποφυγή LazyInitializationException).
     public Service(StudentRepository studentRepo, LessonRepository lessonRepo) {
         this.studentRepo = studentRepo;
         this.lessonRepo = lessonRepo;
@@ -49,7 +50,7 @@ public class Service {
 
     public void deleteStudent(Long id) {
         Objects.requireNonNull(id, "id can't be null");
-
+        // CascadeType.ALL διαγραφει τα lesson  οποτε "plain findById()
         Student student = studentRepo.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Δεν βρεθηκε μαθητης με το ID: " + id));
 
@@ -57,17 +58,15 @@ public class Service {
 
     }
 
-    public Optional<StudentProfileDTO> getStudentProfile(Long studentId){
+    public Optional<StudentProfileDTO> getStudentProfile(Long studentId) {
         Objects.requireNonNull(studentId, "studentId can't be null");
-        //pull all lessons, create student lesson dto -> StudentProfileDTO,
-        return studentRepo.findById(studentId).map(student -> {
-            List<Lesson> lessons = lessonRepo.findByStudentId(studentId);
 
-            return StudentProfileDTO.builder()
-                    .studentDetails(StudentPrintDTO.from(student))
-                    .lessons(lessons.stream().map(l -> LessonPrintDTO.fromEntity(l)).toList())
-                    .build();
-        });
+        return studentRepo.findByIdWithLessons(studentId).map(student -> StudentProfileDTO.builder()
+                .studentDetails(StudentPrintDTO.from(student))
+                .lessons(student.getLessons().stream()
+                        .map(LessonPrintDTO::fromEntity)
+                        .toList())
+                .build());
     }
 
     public StudentUpdateDTO getStudentForUpdate(Long studentId) {
